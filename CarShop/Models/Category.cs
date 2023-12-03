@@ -6,6 +6,7 @@ namespace CarShop.Models
     {
         [Key]
         public int Id { get; set; } // Первичный ключ
+        [Required]
         public string? Name { get; set; }
         public int DisplayOrder { get; set; }
     }

@@ -11,7 +11,7 @@ namespace CarShop.Data
         }
 
 
-        public DbSet<Category> Category { get; set; } // Это свойство необходимо для создания таблицы в БД
+        public DbSet<Category> Categories { get; set; } // Это свойство необходимо для создания таблицы в БД
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

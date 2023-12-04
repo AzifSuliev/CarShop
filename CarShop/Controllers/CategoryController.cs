@@ -13,8 +13,15 @@ namespace CarShop.Controllers
         }
         public IActionResult Index()
         {
+            // Создаём коллекцию, типизированную классом Category. 
+            // Затем присваиваем список категорий из базы данных
             List<Category> objCategoryList = _db.Categories.ToList();
             return View(objCategoryList);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
         }
     }
 }

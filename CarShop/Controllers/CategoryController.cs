@@ -19,8 +19,27 @@ namespace CarShop.Controllers
             return View(objCategoryList);
         }
 
+        // Get-method
         public IActionResult Create()
         {
+            return View();
+        }
+
+        // Post-method
+        [HttpPost]
+        public IActionResult Create(Category obj)
+        {
+            if (obj.Name == obj.DisplayOrder.ToString()) // Проверка на соответствие полей Name и DisplayOrder
+            {
+                // Ошибка
+                ModelState.AddModelError("name", "The display order cannot exactly match the Name");
+            }
+                if (ModelState.IsValid) // Проверка состояния модели
+                {
+                    _db.Categories.Add(obj);
+                    _db.SaveChanges();
+                    return RedirectToAction("Index", "Category");
+                }
             return View();
         }
     }

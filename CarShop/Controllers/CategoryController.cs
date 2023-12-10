@@ -27,14 +27,20 @@ namespace CarShop.Controllers
 
         // Post-method
         [HttpPost]
-        public IActionResult Create(Category obj)
+        public IActionResult Create(Category? obj)
         {
             if (obj.Name == obj.DisplayOrder.ToString()) // Проверка на соответствие полей Name и DisplayOrder
             {
                 // Ошибка
                 ModelState.AddModelError("name", "The display order cannot exactly match the Name");
             }
-                if (ModelState.IsValid) // Проверка состояния модели
+
+            //if (obj.Name != null && obj.Name.ToLower().Equals("test") || (obj.Name != null && obj.Name.ToLower().Equals("тест")))// Проверка на соответствие полей Name и DisplayOrder
+            //{
+            //    // Ошибка
+            //    ModelState.AddModelError("", "Test (тест) is the invalid value!");
+            //}
+            if (ModelState.IsValid) // Проверка состояния модели
                 {
                     _db.Categories.Add(obj);
                     _db.SaveChanges();

@@ -45,6 +45,7 @@ namespace CarShop.Controllers
                 {
                     _db.Categories.Add(obj);
                     _db.SaveChanges();
+                    TempData["success"] = "Категория была успешно добавлена!";
                     return RedirectToAction("Index", "Category");
                 }
             return View();
@@ -84,6 +85,7 @@ namespace CarShop.Controllers
             {
                 _db.Categories.Update(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Категория была успешно изменена!";
                 return RedirectToAction("Index", "Category");
             }
             return View();
@@ -126,6 +128,7 @@ namespace CarShop.Controllers
             }
             _db.Categories.Remove(obj);
             _db.SaveChanges();
+            TempData["success"] = "Категория была успешно удалена!";
             return RedirectToAction("Index", "Category");
         }
     }

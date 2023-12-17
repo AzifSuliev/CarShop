@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarShop", "CarShop\CarShop.csproj", "{CF2D4CEB-3885-49CE-835B-ED94C876F0A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarShop_RazorTemp", "CarShop_RazorTemp\CarShop_RazorTemp.csproj", "{348D0EF7-D195-4690-8BAE-CC11EBA3F6DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarShop_RazorTemp", "CarShop_RazorTemp\CarShop_RazorTemp.csproj", "{348D0EF7-D195-4690-8BAE-CC11EBA3F6DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

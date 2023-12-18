@@ -65,8 +65,10 @@ namespace CarShop.Controllers
             {
                 return NotFound();
             }
+
             // Метод Find работает только с первичным ключом. Здесь извлекается категория из базы данных
             Category? categoryFromDb = _db.Categories.Find(Id);
+
             // Ещё два способа извлечь категорию из базы данных
             //Category? categoryFromDb1 = _db.Categories.FirstOrDefault(u => u.Id.Equals(Id));
             //Category? categoryFromDb2 = _db.Categories.Where(u => u.Id == Id).FirstOrDefault();
@@ -117,7 +119,7 @@ namespace CarShop.Controllers
             return View(categoryFromDb);
         }
 
-        // Post-method для удалени категории
+        // Post-method для удаления категории
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? Id)
         {

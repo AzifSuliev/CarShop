@@ -25,6 +25,7 @@ namespace CarShop_RazorTemp.Pages.Categories
         {
             _db.Categories.Add(Category);
             _db.SaveChanges();
+            TempData["success"] = "Категория была успешно добавлена!";
             return RedirectToPage("Index");
         }
     }

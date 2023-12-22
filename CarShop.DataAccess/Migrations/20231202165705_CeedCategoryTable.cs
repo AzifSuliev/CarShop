@@ -4,7 +4,7 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace CarShop.Migrations
+namespace CarShop.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class CeedCategoryTable : Migration

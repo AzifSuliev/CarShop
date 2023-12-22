@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CarShop.DataAccess\CarShop.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

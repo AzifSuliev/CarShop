@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CarShop.Migrations
+namespace CarShop.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class NewEditCategoryTable : Migration

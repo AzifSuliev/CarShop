@@ -13,7 +13,7 @@ namespace CarShop.Models
         public string? Name { get; set; }
 
         [DisplayName("Display Order")] // Название для поля ввода 
-        [Range(1,100, ErrorMessage = "Значение вне диапазона!")] // Значения int от 1 до 100
+        [Range(1, 100, ErrorMessage = "Значение вне диапазона!")] // Значения int от 1 до 100
         public int DisplayOrder { get; set; }
     }
 }

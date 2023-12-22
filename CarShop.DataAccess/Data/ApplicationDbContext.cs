@@ -1,7 +1,7 @@
 ﻿using CarShop.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarShop.Data
+namespace CarShop.DataAccess.Data
 {
     public class ApplicationDbContext: DbContext
     {

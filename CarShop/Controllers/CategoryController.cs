@@ -1,4 +1,5 @@
 ﻿using CarShop.DataAccess.Data;
+using CarShop.DataAccess.Repository.IRepository;
 using CarShop.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,16 +7,16 @@ namespace CarShop.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly ICategoryRepository _categoryRepo;
+        public CategoryController(ICategoryRepository db)
         {
-            _db = db;
+            _categoryRepo = db;
         }
         public IActionResult Index()
         {
             // Создаём коллекцию, типизированную классом Category. 
             // Затем присваиваем список категорий из базы данных
-            List<Category> objCategoryList = _db.Categories.ToList();
+            List<Category> objCategoryList = _categoryRepo.GetAll().ToList();
             return View(objCategoryList);
         }
 
@@ -43,8 +44,8 @@ namespace CarShop.Controllers
             //}
             if (ModelState.IsValid) // Проверка состояния модели
                 {
-                    _db.Categories.Add(obj);
-                    _db.SaveChanges();
+                    _categoryRepo.Add(obj);
+                    _categoryRepo.Save();
                     TempData["success"] = "Категория была успешно добавлена!";
                     return RedirectToAction("Index", "Category");
                 }
@@ -67,7 +68,7 @@ namespace CarShop.Controllers
             }
 
             // Метод Find работает только с первичным ключом. Здесь извлекается категория из базы данных
-            Category? categoryFromDb = _db.Categories.Find(Id);
+            Category? categoryFromDb = _categoryRepo.Get(u => u.Id == Id);
 
             // Ещё два способа извлечь категорию из базы данных
             //Category? categoryFromDb1 = _db.Categories.FirstOrDefault(u => u.Id.Equals(Id));
@@ -85,8 +86,8 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid) // Проверка состояния модели
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _categoryRepo.Update(obj);
+                _categoryRepo.Save();
                 TempData["success"] = "Категория была успешно изменена!";
                 return RedirectToAction("Index", "Category");
             }
@@ -108,7 +109,7 @@ namespace CarShop.Controllers
                 return NotFound();
             }
             // Метод Find работает только с первичным ключом. Здесь извлекается категория из базы данных
-            Category? categoryFromDb = _db.Categories.Find(Id);
+            Category? categoryFromDb = _categoryRepo.Get(u => u.Id == Id);
             // Ещё два способа извлечь категорию из базы данных
             //Category? categoryFromDb1 = _db.Categories.FirstOrDefault(u => u.Id.Equals(Id));
             //Category? categoryFromDb2 = _db.Categories.Where(u => u.Id == Id).FirstOrDefault();
@@ -123,13 +124,13 @@ namespace CarShop.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? Id)
         {
-            Category obj = _db.Categories.Find(Id);
+            Category obj = _categoryRepo.Get(u => u.Id == Id);
             if(obj == null)
             {
                 return NotFound();
             }
-            _db.Categories.Remove(obj);
-            _db.SaveChanges();
+            _categoryRepo.Remove(obj);
+            _categoryRepo.Save();
             TempData["success"] = "Категория была успешно удалена!";
             return RedirectToAction("Index", "Category");
         }

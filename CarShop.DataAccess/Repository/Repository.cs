@@ -23,6 +23,8 @@ namespace CarShop.DataAccess.Repository
         }
         public void Add(T entity)
         {
+            // Здесь dbSet соответствует выражению _db.Categories
+            // То есть  dbSet.Add(entity) == _db.Categories.Add(entity)
             dbSet.Add(entity);
         }
 
@@ -41,11 +43,15 @@ namespace CarShop.DataAccess.Repository
 
         public void Remove(T entity)
         {
+            // Здесь dbSet соответствует выражению _db.Categories
+            // То есть  dbSet.Remove(entity) == _db.Categories.Remove(entity)
             dbSet.Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<T> entities)
         {
+            // Здесь dbSet соответствует выражению _db.Categories
+            // То есть  dbSet.RemoveRange(entity) == _db.Categories.RemoveRange(entity)
             dbSet.RemoveRange(entities);
         }
     }

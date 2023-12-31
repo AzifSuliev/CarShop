@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarShop.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace CarShop.DataAccess.Repository.IRepository
 {
-    public interface IUnitOfWork
+    public interface IBrandRepository: IRepository<Brand>
     {
-        ICategoryRepository Category { get; }
-        IBrandRepository Brand { get; }
-        void Save();
+        void Update(Brand entity);
     }
 }

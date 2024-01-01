@@ -11,9 +11,14 @@ namespace CarShop.DataAccess.Data
         }
 
 
-        public DbSet<Category> Categories { get; set; } // Это свойство необходимо для создания таблицы в БД
+        public DbSet<Category> Categories { get; set; } // Это свойство необходимо для создания таблицы
+                                                        // с типами кузовов авто в БД
 
-        public DbSet<Brand> Brands { get; set; } // Это свойство необходимо для создания таблицы в БД
+        public DbSet<Brand> Brands { get; set; } // Это свойство необходимо для создания таблицы
+                                                 // с названиями марок авто в БД
+
+        public DbSet<Product> Products { get; set; } // Это свойство необходимо для создания таблицы
+                                                     // с названиями моделей авто в БД
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +57,17 @@ namespace CarShop.DataAccess.Data
                 new Brand { Id = 11, DisplayOrder = 11, Name = "Volvo"},
                 new Brand { Id = 12, DisplayOrder = 12, Name = "Kia"},
                 new Brand { Id = 13, DisplayOrder = 13, Name = "Hyundai" }
+                );
+
+            modelBuilder.Entity<Product>().HasData(
+                new Product { Id = 1, CarName = "BMW 318i", Description = "Мощность двигателя: 156 л.с\nРасход топлива: 6,3 л/100 км", basicEquipmentPrice = 120000, fullEquipmentPrice = 2000000 },
+                new Product { Id = 2, CarName = "BMW X6 M50i", Description = "Мощность двигателя: 480 л.с.\nРасход топлива в л/100км (смешанный цикл): 11.5", basicEquipmentPrice = 1000000, fullEquipmentPrice = 180000},
+                new Product { Id = 3, CarName = "Mercedes-Benz C118/X118", Description = "Мощность двигателя: 421 л.с.\nРасход топлива: 9.2 на 100 км",  basicEquipmentPrice = 1500000, fullEquipmentPrice = 2000000},
+                new Product { Id = 4, CarName = "Nissan Tiida", Description = "Мощность двигателя: 128 л.с.\nРасход топлива: 4.7-10.1 л/100 км", basicEquipmentPrice = 700000, fullEquipmentPrice = 850000},
+                new Product { Id = 5, CarName = "Toyota Sequoia", Description = "Мощность двигателя: 437 л.с.n\nРасход топлива: 11.7-23 л/100 км", basicEquipmentPrice = 1200000, fullEquipmentPrice = 1400000 },
+                new Product { Id = 6, CarName = "Kia XCeed", Description = "Мощность двигателя: 200 л.с.n\nРасход топлива: 7.1 л/100 км", basicEquipmentPrice = 600000, fullEquipmentPrice = 750000 },
+                new Product { Id = 7, CarName = "Honda Civic 1.0", Description = "Мощность двигателя: 129 л.с.n\nРасход топлива: 5.5 л/100 км", basicEquipmentPrice = 600000, fullEquipmentPrice = 750000 },
+                new Product { Id = 8, CarName = "HYUNDAI Tucson", Description = "Мощность двигателя: 185 л.с.n\nРасход топлива: 5.4 л/100 км", basicEquipmentPrice = 600000, fullEquipmentPrice = 750000 }
                 );
         }
     }

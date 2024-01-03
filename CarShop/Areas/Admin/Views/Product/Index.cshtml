@@ -34,22 +34,30 @@
                     <th>
                         Цена полной комплектации
                     </th>
+                    <th>
+                        Тип кузова
+                    </th>
+                    <th>
+                        Марка
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (Product obj in Model.OrderBy(u => u.Id))
                 {
                     <tr>
-                        <td style="width:250px">@obj.CarName</td>
+                        <td style="width:150px">@obj.CarName</td>
                         <td>@obj.Description</td>
                         <td>@obj.basicEquipmentPrice</td>
                         <td>@obj.fullEquipmentPrice</td>
-                        <td class="w-150" role="group">
+                        <td style="width:100px"></td>
+                        <td style="width:100px"></td>
+                        <td style="width:180px" role="group">
                             <div >
-                                <a style="width:200px" asp-controller="Product" asp-action="Edit" asp-route-Id="@obj.Id" class="btn btn-secondary mx-2 my-2">
+                                <a style="width:180px" asp-controller="Product" asp-action="Edit" asp-route-Id="@obj.Id" class="btn btn-secondary mx-4 my-2">
                                     <i class="bi bi-pencil-square"></i> Редактировать
                                 </a>
-                                <a style="width:200px" asp-controller="Product" asp-action="Delete" asp-route-Id="@obj.Id" class="btn btn-danger mx-2 my-2">
+                                <a style="width:180px" asp-controller="Product" asp-action="Delete" asp-route-Id="@obj.Id" class="btn btn-danger mx-4 my-2">
                                     <i class="bi bi-trash3-fill"></i> Удалить
                                 </a>
                             </div>

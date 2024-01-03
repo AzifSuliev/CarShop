@@ -3,6 +3,7 @@ using CarShop.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShop.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240103153036_addForeignKeysForCategoryAndBrandProductRelation")]
+    partial class addForeignKeysForCategoryAndBrandProductRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -275,10 +278,6 @@ namespace CarShop.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("basicEquipmentPrice")
                         .HasColumnType("float");
 
@@ -301,7 +300,6 @@ namespace CarShop.DataAccess.Migrations
                             CarName = "BMW 318i",
                             CategoryId = 7,
                             Description = "Мощность двигателя: 156 л.с\nРасход топлива: 6,3 л/100 км",
-                            ImageURL = "",
                             basicEquipmentPrice = 120000.0,
                             fullEquipmentPrice = 2000000.0
                         },
@@ -312,7 +310,6 @@ namespace CarShop.DataAccess.Migrations
                             CarName = "BMW X6 M50i",
                             CategoryId = 1,
                             Description = "Мощность двигателя: 480 л.с.\nРасход топлива в л/100км (смешанный цикл): 11.5",
-                            ImageURL = "",
                             basicEquipmentPrice = 1000000.0,
                             fullEquipmentPrice = 180000.0
                         },
@@ -323,7 +320,6 @@ namespace CarShop.DataAccess.Migrations
                             CarName = "Mercedes-Benz C118/X118",
                             CategoryId = 6,
                             Description = "Мощность двигателя: 421 л.с.\nРасход топлива: 9.2 на 100 км",
-                            ImageURL = "",
                             basicEquipmentPrice = 1500000.0,
                             fullEquipmentPrice = 2000000.0
                         },
@@ -334,7 +330,6 @@ namespace CarShop.DataAccess.Migrations
                             CarName = "Nissan Tiida",
                             CategoryId = 3,
                             Description = "Мощность двигателя: 128 л.с.\nРасход топлива: 4.7-10.1 л/100 км",
-                            ImageURL = "",
                             basicEquipmentPrice = 700000.0,
                             fullEquipmentPrice = 850000.0
                         },
@@ -345,7 +340,6 @@ namespace CarShop.DataAccess.Migrations
                             CarName = "Toyota Sequoia",
                             CategoryId = 8,
                             Description = "Мощность двигателя: 437 л.с.n\nРасход топлива: 11.7-23 л/100 км",
-                            ImageURL = "",
                             basicEquipmentPrice = 1200000.0,
                             fullEquipmentPrice = 1400000.0
                         },
@@ -356,7 +350,6 @@ namespace CarShop.DataAccess.Migrations
                             CarName = "Kia XCeed",
                             CategoryId = 2,
                             Description = "Мощность двигателя: 200 л.с.n\nРасход топлива: 7.1 л/100 км",
-                            ImageURL = "",
                             basicEquipmentPrice = 600000.0,
                             fullEquipmentPrice = 750000.0
                         },
@@ -367,7 +360,6 @@ namespace CarShop.DataAccess.Migrations
                             CarName = "Honda Civic 1.0",
                             CategoryId = 1,
                             Description = "Мощность двигателя: 129 л.с.n\nРасход топлива: 5.5 л/100 км",
-                            ImageURL = "",
                             basicEquipmentPrice = 600000.0,
                             fullEquipmentPrice = 750000.0
                         },
@@ -378,7 +370,6 @@ namespace CarShop.DataAccess.Migrations
                             CarName = "HYUNDAI Tucson",
                             CategoryId = 7,
                             Description = "Мощность двигателя: 185 л.с.n\nРасход топлива: 5.4 л/100 км",
-                            ImageURL = "",
                             basicEquipmentPrice = 600000.0,
                             fullEquipmentPrice = 750000.0
                         });

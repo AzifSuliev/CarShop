@@ -94,26 +94,59 @@ namespace CarShop.Areas.Admin.Controllers
             if (Id == null || Id == 0) return NotFound();
 
             Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == Id);
-            if (productFromDb == null) return NotFound();
-            return View(productFromDb);
+
+            ProductVM productVM = new ProductVM()
+            {
+                CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                BrandList = _unitOfWork.Brand.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+
+                Product = productFromDb
+            };
+            
+            if (productVM == null) return NotFound();
+            return View(productVM);
         }
 
         /// <summary>
         /// Post метод Edit
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="productVm"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Edit(Product obj)
+        public IActionResult Edit(ProductVM productVm)
         {
             if (ModelState.IsValid) // Проверка состояния модели
             {
-                _unitOfWork.Product.Update(obj);
+                _unitOfWork.Product.Update(productVm.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Машина была успешно изменена!";
                 return RedirectToAction("Index", "Product");
             }
-            return View();
+            else
+            {
+
+                productVm.CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+                productVm.BrandList = _unitOfWork.Brand.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+
+                return View(productVm);
+
+            }
         }
 
         public IActionResult Delete(int? Id)

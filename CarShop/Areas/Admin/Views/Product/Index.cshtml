@@ -23,7 +23,7 @@
             <thead>
                 <tr>
                     <th>
-                       Название авто
+                        Название авто
                     </th>
                     <th>
                         Описание
@@ -50,10 +50,10 @@
                         <td>@obj.Description</td>
                         <td>@obj.basicEquipmentPrice</td>
                         <td>@obj.fullEquipmentPrice</td>
-                        <td style="width:100px"></td>
-                        <td style="width:100px"></td>
+                        <td style="width:100px">@obj.CategoryId</td>
+                        <td style="width:100px">@obj.BrandId</td>
                         <td style="width:180px" role="group">
-                            <div >
+                            <div>
                                 <a style="width:180px" asp-controller="Product" asp-action="Edit" asp-route-Id="@obj.Id" class="btn btn-secondary mx-4 my-2">
                                     <i class="bi bi-pencil-square"></i> Редактировать
                                 </a>

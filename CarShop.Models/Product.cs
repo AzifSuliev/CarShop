@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -29,14 +30,17 @@ namespace CarShop.Models
         // Внешний ключ для типа кузова
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
+        [ValidateNever]
         public Category Category { get; set; }
 
         // Внешний ключ для марки автомобиля
         public int BrandId { get; set; }
         [ForeignKey("BrandId")]
+        [ValidateNever]
         public Brand Brand { get; set; }
 
         // ссылкa (URL) на изображение продукта (автомобиля)
+        [ValidateNever]
         public string ImageURL { get; set; }
     }
 }

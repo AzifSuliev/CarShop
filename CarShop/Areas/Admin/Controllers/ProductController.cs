@@ -1,8 +1,11 @@
 ﻿using CarShop.DataAccess.Repository.IRepository;
 using CarShop.Models;
+using CarShop.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CarShop.Areas.Admin.Controllers
 {
@@ -27,33 +30,58 @@ namespace CarShop.Areas.Admin.Controllers
         /// <returns></returns>
         public IActionResult Create() 
         {
-            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.
-                GetAll().Select(u => new SelectListItem
+            ProductVM productVm = new ProductVM()
+            {
+                CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
                 {
                     Text = u.Name,
                     Value = u.Id.ToString()
-                });
-            ViewBag.CategoryList = CategoryList; // Динамический контейнер ViewBag
-            return View();
+                }),
+                BrandList = _unitOfWork.Brand.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                Product = new Product()
+            };
+            // ViewBag.CategoryList = CategoryList; // Динамический контейнер ViewBag
+            // ViewData["CategoryList"] = CategoryList; // Динамический контейнер ViewData
+            return View(productVm);
         }
 
 
         /// <summary>
         /// Post метод Create
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="productVm"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM productVm)
         {
             if (ModelState.IsValid) // Проверка состояния модели
             {
-                _unitOfWork.Product.Add(obj);
+                _unitOfWork.Product.Add(productVm.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Машина была успешно добавлена!";
                 return RedirectToAction("Index", "Product");
             }
-            return View();
+            else
+            {
+
+                productVm.CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+                productVm.BrandList = _unitOfWork.Brand.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+
+                return View(productVm);
+
+            }   
         }
 
         /// <summary>

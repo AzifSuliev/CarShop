@@ -12,10 +12,12 @@ namespace CarShop.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProductController : Controller
     {
-        private IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -28,8 +30,9 @@ namespace CarShop.Areas.Admin.Controllers
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public IActionResult Create() 
+        public IActionResult Upsert(int? Id) // = Update + Insert
         {
+            
             ProductVM productVm = new ProductVM()
             {
                 CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
@@ -44,9 +47,18 @@ namespace CarShop.Areas.Admin.Controllers
                 }),
                 Product = new Product()
             };
-            // ViewBag.CategoryList = CategoryList; // Динамический контейнер ViewBag
-            // ViewData["CategoryList"] = CategoryList; // Динамический контейнер ViewData
-            return View(productVm);
+
+            if(Id == null || Id == 0) // Если выражение истино, то это Create 
+            {
+                // create
+                return View(productVm);
+            }
+            else // Иначе -- Update
+            {
+                // update
+                productVm.Product = _unitOfWork.Product.Get(u => u.Id == Id);
+                return View(productVm);
+            }
         }
 
 
@@ -56,10 +68,23 @@ namespace CarShop.Areas.Admin.Controllers
         /// <param name="productVm"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Create(ProductVM productVm)
+        public IActionResult Upsert(ProductVM productVm, IFormFile? file)
         {
             if (ModelState.IsValid) // Проверка состояния модели
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+                if(file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName),FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVm.Product.ImageURL = @"\images\product" + fileName;
+                }
+
                 _unitOfWork.Product.Add(productVm.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Машина была успешно добавлена!";
@@ -84,70 +109,7 @@ namespace CarShop.Areas.Admin.Controllers
             }   
         }
 
-        /// <summary>
-        /// Get метод Edit
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public IActionResult Edit(int Id)
-        {
-            if (Id == null || Id == 0) return NotFound();
-
-            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == Id);
-
-            ProductVM productVM = new ProductVM()
-            {
-                CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                }),
-                BrandList = _unitOfWork.Brand.GetAll().Select(u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                }),
-
-                Product = productFromDb
-            };
-            
-            if (productVM == null) return NotFound();
-            return View(productVM);
-        }
-
-        /// <summary>
-        /// Post метод Edit
-        /// </summary>
-        /// <param name="productVm"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public IActionResult Edit(ProductVM productVm)
-        {
-            if (ModelState.IsValid) // Проверка состояния модели
-            {
-                _unitOfWork.Product.Update(productVm.Product);
-                _unitOfWork.Save();
-                TempData["success"] = "Машина была успешно изменена!";
-                return RedirectToAction("Index", "Product");
-            }
-            else
-            {
-
-                productVm.CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                });
-                productVm.BrandList = _unitOfWork.Brand.GetAll().Select(u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                });
-
-                return View(productVm);
-
-            }
-        }
+       
 
         public IActionResult Delete(int? Id)
         {

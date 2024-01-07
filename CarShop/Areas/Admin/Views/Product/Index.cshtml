@@ -13,7 +13,7 @@
     <div class="card-body p-4">
         <div class="row pt-4">
             <div class="col-12 text-end pb-4">
-                <a asp-controller="Product" asp-action="Create" class="btn btn-primary">
+                <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary">
                     <i class="bi bi-plus-circle"></i> Добавить новый автомобиль
                 </a>
             </div>
@@ -50,11 +50,11 @@
                         <td>@obj.Description</td>
                         <td>@obj.basicEquipmentPrice</td>
                         <td>@obj.fullEquipmentPrice</td>
-                        <td style="width:100px">@obj.CategoryId</td>
-                        <td style="width:100px">@obj.BrandId</td>
+                        <td style="width:100px"></td>
+                        <td style="width:100px"></td>
                         <td style="width:180px" role="group">
                             <div>
-                                <a style="width:180px" asp-controller="Product" asp-action="Edit" asp-route-Id="@obj.Id" class="btn btn-secondary mx-4 my-2">
+                                <a style="width:180px" asp-controller="Product" asp-action="Upsert" asp-route-Id="@obj.Id" class="btn btn-secondary mx-4 my-2">
                                     <i class="bi bi-pencil-square"></i> Редактировать
                                 </a>
                                 <a style="width:180px" asp-controller="Product" asp-action="Delete" asp-route-Id="@obj.Id" class="btn btn-danger mx-4 my-2">

@@ -28,12 +28,14 @@ namespace CarShop.Models
         public double fullEquipmentPrice { get; set; }
 
         // Внешний ключ для типа кузова
+        
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         [ValidateNever]
         public Category Category { get; set; }
 
         // Внешний ключ для марки автомобиля
+      
         public int BrandId { get; set; }
         [ForeignKey("BrandId")]
         [ValidateNever]

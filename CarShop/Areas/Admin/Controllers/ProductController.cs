@@ -82,7 +82,7 @@ namespace CarShop.Areas.Admin.Controllers
                     {
                         file.CopyTo(fileStream);
                     }
-                    productVm.Product.ImageURL = @"\images\product" + fileName;
+                    productVm.Product.ImageURL = @"\images\product\" + fileName;
                 }
 
                 _unitOfWork.Product.Add(productVm.Product);

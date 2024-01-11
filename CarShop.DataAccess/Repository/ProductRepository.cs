@@ -19,7 +19,20 @@ namespace CarShop.DataAccess.Repository
         }
         public void Update(Product entity)
         {
-            _db.Products.Update(entity);
+            var objFromDb = _db.Products.FirstOrDefault(u => u.Id == entity.Id);
+            if (objFromDb != null)
+            {
+                objFromDb.CarName = entity.CarName;
+                objFromDb.Description = entity.Description;
+                objFromDb.basicEquipmentPrice = entity.basicEquipmentPrice;
+                objFromDb.fullEquipmentPrice = entity.fullEquipmentPrice;
+                objFromDb.CategoryId = entity.CategoryId;
+                objFromDb.BrandId = entity.BrandId;
+                if(objFromDb.ImageURL != null)
+                {
+                    objFromDb.ImageURL = entity.ImageURL;
+                }
+            }
         }
     }
 }

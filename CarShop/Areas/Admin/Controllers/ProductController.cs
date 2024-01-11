@@ -78,6 +78,18 @@ namespace CarShop.Areas.Admin.Controllers
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                    if(!string.IsNullOrEmpty(productVm.Product.ImageURL) )
+                    {
+                        // Удаление изображения 
+                        var oldImagePath = 
+                            Path.Combine(wwwRootPath, productVm.Product.ImageURL.TrimStart('\\'));
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName),FileMode.Create))
                     {
                         file.CopyTo(fileStream);
@@ -85,7 +97,16 @@ namespace CarShop.Areas.Admin.Controllers
                     productVm.Product.ImageURL = @"\images\product\" + fileName;
                 }
 
-                _unitOfWork.Product.Add(productVm.Product);
+                if(productVm.Product.Id == 0) 
+                {
+                    // Добавление нового объекта при Id равным 0
+                    _unitOfWork.Product.Add(productVm.Product);
+                }
+                else
+                {
+                    // Редактирование существующего объекта при Id НЕ равным 0
+                    _unitOfWork.Product.Update(productVm.Product);
+                }
                 _unitOfWork.Save();
                 TempData["success"] = "Машина была успешно добавлена!";
                 return RedirectToAction("Index", "Product");

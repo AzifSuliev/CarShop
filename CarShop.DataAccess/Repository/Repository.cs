@@ -20,6 +20,7 @@ namespace CarShop.DataAccess.Repository
         {
             _db = db;
             this.dbSet = _db.Set<T>();
+            _db.Products.Include(u => u.Category).Include(u => u.Brand);
         }
         public void Add(T entity)
         {
@@ -28,16 +29,46 @@ namespace CarShop.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, string? includeCategoryProperties = null, string? includeBrandProperties = null)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
+            // Проверка на null
+            if (!string.IsNullOrEmpty(includeCategoryProperties) && !string.IsNullOrEmpty(includeBrandProperties))
+            {
+                foreach (var includeProp in includeCategoryProperties.
+                    Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+
+                foreach (var includeProp in includeBrandProperties.
+                    Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includeCategoryProperties = null, string? includeBrandProperties = null)
         {
             IQueryable<T> query = dbSet;
+            // Проверка на null
+            if (!string.IsNullOrEmpty(includeCategoryProperties) && !string.IsNullOrEmpty(includeBrandProperties))
+            {
+                foreach(var includeProp in includeCategoryProperties.
+                    Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+
+                foreach (var includeProp in includeBrandProperties.
+                    Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.ToList();
         }
 

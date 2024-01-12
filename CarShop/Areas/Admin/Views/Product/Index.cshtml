@@ -50,8 +50,8 @@
                         <td>@obj.Description</td>
                         <td>@obj.basicEquipmentPrice</td>
                         <td>@obj.fullEquipmentPrice</td>
-                        <td style="width:100px"></td>
-                        <td style="width:100px"></td>
+                        <td style="width:100px">@obj.Category.Name</td>
+                        <td style="width:100px">@obj.Brand.Name</td>
                         <td style="width:180px" role="group">
                             <div>
                                 <a style="width:180px" asp-controller="Product" asp-action="Upsert" asp-route-Id="@obj.Id" class="btn btn-secondary mx-4 my-2">

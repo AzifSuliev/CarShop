@@ -21,7 +21,8 @@ namespace CarShop.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> objProductsList = _unitOfWork.Product.GetAll().ToList();
+            List<Product> objProductsList = _unitOfWork.Product.GetAll(includeCategoryProperties:"Category", 
+                includeBrandProperties: "Brand").ToList();
             return View(objProductsList);
         }
 
@@ -97,14 +98,14 @@ namespace CarShop.Areas.Admin.Controllers
                     productVm.Product.ImageURL = @"\images\product\" + fileName;
                 }
 
-                if(productVm.Product.Id == 0) 
-                {
-                    // Добавление нового объекта при Id равным 0
+                if(productVm.Product.Id == 0)  // Добавление нового объекта при Id равным 0
+                {                   
+                    productVm.Product.Description = System.Text.RegularExpressions.Regex.Replace(productVm.Product.Description, "<.*?>", string.Empty);
                     _unitOfWork.Product.Add(productVm.Product);
                 }
-                else
-                {
-                    // Редактирование существующего объекта при Id НЕ равным 0
+                else                           // Редактирование существующего объекта при Id НЕ равным 0
+                {   
+                    productVm.Product.Description = System.Text.RegularExpressions.Regex.Replace(productVm.Product.Description, "<.*?>", string.Empty);
                     _unitOfWork.Product.Update(productVm.Product);
                 }
                 _unitOfWork.Save();

@@ -3,6 +3,7 @@ using CarShop.Models;
 using CarShop.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json.Linq;
 using static System.Net.Mime.MediaTypeNames;
@@ -131,40 +132,39 @@ namespace CarShop.Areas.Admin.Controllers
             }   
         }
 
-       
+        #region APICALLS
 
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Product> objProductsList = _unitOfWork.Product.GetAll(includeCategoryProperties: "Category",
+               includeBrandProperties: "Brand").ToList();
+            return Json(new {data = objProductsList });
+        }
+
+       // [HttpDelete]
         public IActionResult Delete(int? Id)
         {
-            if (Id == null || Id == 0)
-            {
-                return NotFound();
-            }
-            // Здесь извлекается категория из базы данных
-            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == Id);
-            if (productFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(productFromDb);
-        }
 
-        /// <summary>
-        /// Post метод Delete
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(int? Id)
-        {
-            Product obj = _unitOfWork.Product.Get(u => u.Id == Id);
-            if (obj == null)
+            var productToBeDeleted = _unitOfWork.Product.Get(u => u.Id == Id);
+
+            if(productToBeDeleted == null)
             {
-                return NotFound();
+                return Json( new {success = false, message="Ошибка удаления"});
             }
-            _unitOfWork.Product.Remove(obj);
+
+            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, productToBeDeleted.ImageURL.TrimStart('\\'));
+            if (System.IO.File.Exists(oldImagePath))
+            {
+                System.IO.File.Delete(oldImagePath);
+            }
+
+            _unitOfWork.Product.Remove(productToBeDeleted);
             _unitOfWork.Save();
-            TempData["success"] = "Машина была успешно удалена!";
-            return RedirectToAction("Index", "Product");
+
+           
+            return Json(new { success = true, message = "Объект удалён" });
         }
+        #endregion
     }
 }

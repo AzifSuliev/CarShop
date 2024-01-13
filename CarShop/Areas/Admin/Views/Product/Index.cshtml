@@ -19,52 +19,22 @@
             </div>
         </div>
 
-        <table class=" table table-bordered table-striped">
+        <table id="tblData" class="table table-bordered table-striped" style="width:100%; margin-left:-20px">
             <thead>
                 <tr>
-                    <th>
-                        Название авто
-                    </th>
-                    <th>
-                        Описание
-                    </th>
-                    <th>
-                        Цена базовой комплектации
-                    </th>
-                    <th>
-                        Цена полной комплектации
-                    </th>
-                    <th>
-                        Тип кузова
-                    </th>
-                    <th>
-                        Марка
-                    </th>
+                    <th> Название авто</th>
+                    <th>Описание</th>
+                    <th>Цена базовой комплектации</th>
+                    <th>Цена полной комплектации</th>
+                    <th>Тип кузова</th>
+                    <th>Марка</th>
+                    <th></th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach (Product obj in Model.OrderBy(u => u.Id))
-                {
-                    <tr>
-                        <td style="width:150px">@obj.CarName</td>
-                        <td>@obj.Description</td>
-                        <td>@obj.basicEquipmentPrice</td>
-                        <td>@obj.fullEquipmentPrice</td>
-                        <td style="width:100px">@obj.Category.Name</td>
-                        <td style="width:100px">@obj.Brand.Name</td>
-                        <td style="width:180px" role="group">
-                            <div>
-                                <a style="width:180px" asp-controller="Product" asp-action="Upsert" asp-route-Id="@obj.Id" class="btn btn-secondary mx-4 my-2">
-                                    <i class="bi bi-pencil-square"></i> Редактировать
-                                </a>
-                                <a style="width:180px" asp-controller="Product" asp-action="Delete" asp-route-Id="@obj.Id" class="btn btn-danger mx-4 my-2">
-                                    <i class="bi bi-trash3-fill"></i> Удалить
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
         </table>
     </div>
 </div>
+
+@section Scripts{
+    <script src="~/js/product.js"></script>
+}

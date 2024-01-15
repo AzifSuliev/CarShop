@@ -1,0 +1,8 @@
+﻿#bgColor {
+    background: radial-gradient(#f6efef 0%, #c0b4b4 0%);
+}
+#cardSize {
+    max-width: 300px; /* установите желаемую максимальную ширину */
+    height: 480px; /* установите желаемую высоту */
+    background: radial-gradient(#b6b6e2 0%, #d0d5d7 99%);
+}

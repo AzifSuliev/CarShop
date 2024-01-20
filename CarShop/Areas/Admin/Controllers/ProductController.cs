@@ -28,7 +28,7 @@ namespace CarShop.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// Get метод Create
+        /// Get метод Upsert
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -65,23 +65,35 @@ namespace CarShop.Areas.Admin.Controllers
 
 
         /// <summary>
-        /// Post метод Create
+        /// Post метод Upsert
         /// </summary>
         /// <param name="productVm"></param>
         /// <returns></returns>
         [HttpPost]
         public IActionResult Upsert(ProductVM productVm, IFormFile? file)
         {
-            if (ModelState.IsValid) // Проверка состояния модели
+            if (ModelState.IsValid) // Проверка валидации модели
             {
+                // WebRootPath предназначен для предоставления физического пути к папке wwwroot
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
-
-                if(file != null)
+                // переменная file - файл загруженный из страницы пользователя
+                if (file != null)
                 {
+                    // Генерируется уникальное имя файла с использованием Guid.NewGuid()
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+                    /*
+                      Path.Combine(wwwRootPath, @"images\product"): Это использует метод Path.Combine для объединения двух частей пути.
+                      Первая часть — wwwRootPath, это физический путь к папке wwwroot. 
+                      Вторая часть — @"images\product", это относительный путь, где images — подпапка в wwwroot, а product — подпапка внутри images.
+s                     string productPath - это переменная, которая получает финальный путь к папке, где будут храниться изображения продуктов. 
+                      В результате выполнения этой строки, productPath будет содержать физический путь к папке wwwroot\images\product.
+                     */
                     string productPath = Path.Combine(wwwRootPath, @"images\product");
 
-                    if(!string.IsNullOrEmpty(productVm.Product.ImageURL) )
+
+                    // Если в объекте productVm.Product уже существует URL изображения, то старое изображение удаляется.
+                    if (!string.IsNullOrEmpty(productVm.Product.ImageURL) )
                     {
                         // Удаление изображения 
                         var oldImagePath = 
@@ -92,6 +104,8 @@ namespace CarShop.Areas.Admin.Controllers
                         }
                     }
 
+                    // в этой части кода файл загружается на сервер и сохраняется в указанной директории,
+                    // а затем путь к этому файлу присваивается свойству ImageURL объекта Product
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName),FileMode.Create))
                     {
                         file.CopyTo(fileStream);

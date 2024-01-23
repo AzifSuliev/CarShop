@@ -22,6 +22,8 @@ namespace CarShop.DataAccess.Data
         public DbSet<Product> Products { get; set; } // Это свойство необходимо для создания таблицы
                                                      // с названиями моделей авто в БД
 
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

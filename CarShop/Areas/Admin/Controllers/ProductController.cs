@@ -124,7 +124,7 @@ s                     string productPath - это переменная, кото
                     _unitOfWork.Product.Update(productVm.Product);
                 }
                 _unitOfWork.Save();
-                TempData["success"] = "Машина была успешно добавлена!";
+                TempData["success"] = "Выполнено!";
                 return RedirectToAction("Index", "Product");
             }
             else

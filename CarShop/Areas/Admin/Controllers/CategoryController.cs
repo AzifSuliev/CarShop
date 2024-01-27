@@ -1,11 +1,14 @@
 ﻿using CarShop.DataAccess.Data;
 using CarShop.DataAccess.Repository.IRepository;
 using CarShop.Models;
+using CarShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarShop.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

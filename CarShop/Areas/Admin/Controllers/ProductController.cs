@@ -1,6 +1,8 @@
 ﻿using CarShop.DataAccess.Repository.IRepository;
 using CarShop.Models;
 using CarShop.Models.ViewModels;
+using CarShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,6 +13,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace CarShop.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

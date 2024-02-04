@@ -1,0 +1,40 @@
+﻿
+
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient mt-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white">
+                    Список компаний
+                </h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pt-4">
+            <div class="col-12 text-end pb-4">
+                <a asp-controller="Company" asp-action="Upsert" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Добавить новую компанию
+                </a>
+            </div>
+        </div>
+
+        <table id="tblData" class="table table-bordered table-striped" style="width:100%; margin-left:-20px">
+            <thead>
+                <tr>
+                    <th>Название компании</th>
+                    <th>Адрес компании</th>
+                    <th>Город</th>
+                    <th>Регион/Штат</th>
+                    <th>Почтовый индекс</th>
+                    <th>Номер телефона</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/company.js"></script>
+}

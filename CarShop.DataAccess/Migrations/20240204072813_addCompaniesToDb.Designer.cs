@@ -4,6 +4,7 @@ using CarShop.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShop.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240204072813_addCompaniesToDb")]
+    partial class addCompaniesToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,9 +265,6 @@ namespace CarShop.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -284,38 +284,6 @@ namespace CarShop.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            City = "Tech City",
-                            Name = "Tech Solution",
-                            PhoneNumber = "7777777777",
-                            PostalCode = "123456",
-                            State = "IL",
-                            StreetAddres = "123 Tech st"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            City = "NY",
-                            Name = "High tech",
-                            PhoneNumber = "8888888888",
-                            PostalCode = "32165",
-                            State = "NY",
-                            StreetAddres = "15 High st"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            City = "Big city",
-                            Name = "New systems",
-                            PhoneNumber = "3333333333",
-                            PostalCode = "246515",
-                            State = "Oh",
-                            StreetAddres = "22 New st"
-                        });
                 });
 
             modelBuilder.Entity("CarShop.Models.Product", b =>
@@ -663,9 +631,6 @@ namespace CarShop.DataAccess.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -678,8 +643,6 @@ namespace CarShop.DataAccess.Migrations
 
                     b.Property<string>("StreetAddres")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -752,15 +715,6 @@ namespace CarShop.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("CarShop.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("CarShop.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
                 });
 #pragma warning restore 612, 618
         }

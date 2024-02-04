@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarShop.DataAccess.Data
 {
-    public class ApplicationDbContext: IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            
+
         }
 
 
@@ -24,13 +24,48 @@ namespace CarShop.DataAccess.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+        public DbSet<Company> Companies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Company>().HasData(
+                new Company
+                {
+                    Id = 1,
+                    Name = "Tech Solution",
+                    StreetAddres = "123 Tech st",
+                    City = "Tech City",
+                    State = "IL",
+                    PostalCode = "123456",
+                    PhoneNumber = "7777777777"
+                },
+                new Company
+                {
+                    Id = 2,
+                    Name = "High tech",
+                    StreetAddres = "15 High st",
+                    City = "NY",
+                    State = "NY",
+                    PostalCode = "32165",
+                    PhoneNumber = "8888888888"
+                },
+                new Company
+                {
+                    Id = 3,
+                    Name = "New systems",
+                    StreetAddres = "22 New st",
+                    City = "Big city",
+                    State = "Oh",
+                    PostalCode = "246515",
+                    PhoneNumber = "3333333333"
+                }
+                );
+
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, DisplayOrder = 1, Name = "Седан" },
-                new Category { Id = 2, DisplayOrder = 2, Name = "Купе"},
+                new Category { Id = 2, DisplayOrder = 2, Name = "Купе" },
                 new Category { Id = 3, DisplayOrder = 3, Name = "Хэтчбек" },
                 new Category { Id = 4, DisplayOrder = 4, Name = "Лифтбек" },
                 new Category { Id = 5, DisplayOrder = 5, Name = "Фастбек" },
@@ -50,18 +85,18 @@ namespace CarShop.DataAccess.Data
                 );
 
             modelBuilder.Entity<Brand>().HasData(
-                new Brand { Id = 1, DisplayOrder = 1, Name = "Toyota"},
-                new Brand { Id = 2, DisplayOrder = 2, Name = "Subaru"},
-                new Brand { Id = 3, DisplayOrder = 3, Name = "BMW"},
+                new Brand { Id = 1, DisplayOrder = 1, Name = "Toyota" },
+                new Brand { Id = 2, DisplayOrder = 2, Name = "Subaru" },
+                new Brand { Id = 3, DisplayOrder = 3, Name = "BMW" },
                 new Brand { Id = 4, DisplayOrder = 4, Name = "Mercedes" },
                 new Brand { Id = 5, DisplayOrder = 5, Name = "Mitsubishi" },
-                new Brand { Id = 6, DisplayOrder = 6, Name = "Nissan"},
-                new Brand { Id = 7, DisplayOrder = 7, Name = "Opel"}, 
-                new Brand { Id = 8, DisplayOrder = 8, Name = "Renault"},
-                new Brand { Id = 9, DisplayOrder = 9, Name = "Honda"},
-                new Brand { Id = 10, DisplayOrder = 10, Name = "Audi"},
-                new Brand { Id = 11, DisplayOrder = 11, Name = "Volvo"},
-                new Brand { Id = 12, DisplayOrder = 12, Name = "Kia"},
+                new Brand { Id = 6, DisplayOrder = 6, Name = "Nissan" },
+                new Brand { Id = 7, DisplayOrder = 7, Name = "Opel" },
+                new Brand { Id = 8, DisplayOrder = 8, Name = "Renault" },
+                new Brand { Id = 9, DisplayOrder = 9, Name = "Honda" },
+                new Brand { Id = 10, DisplayOrder = 10, Name = "Audi" },
+                new Brand { Id = 11, DisplayOrder = 11, Name = "Volvo" },
+                new Brand { Id = 12, DisplayOrder = 12, Name = "Kia" },
                 new Brand { Id = 13, DisplayOrder = 13, Name = "Hyundai" }
                 );
 
@@ -154,7 +189,7 @@ namespace CarShop.DataAccess.Data
                     BrandId = 13,
                     ImageURL = ""
                 }
-                ) ;
+                );
         }
     }
 }

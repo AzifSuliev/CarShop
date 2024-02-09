@@ -42,25 +42,47 @@
                             </div>
                             <div class="p-1 col-3 col-lg-5 bg-white text-warning fw-bold">
                                 <div>@Model.fullEquipmentPrice.ToString("c")</div>
-                            </div>                         
+                            </div>
                         </div>
                         <div class="row pl-2 my-3">
                             <p class="text-secondary lh-sm">Описание</p>
                             <p>@Model.Description</p>
                         </div>
-                        
+
+                        <div class="input-group mb-3" style="width:100px">
+                            <button class="btn btn-outline-secondary"  type="button" id="minusBtn">-</button>
+                            <input type="text" class="form-control text-center" value="1" id="quantityInput">
+                            <button class="btn btn-outline-secondary" type="button" id="plusBtn">+</button>
+                        </div>
+
                         <div class="row">
                             <div class="col-12 col-md-6 pb-1">
                                 <button type="submit" disabled
                                         class="btn btn-primary bg-gradient  w-100 py-2 text-uppercase fw-semibold">
-                                   Добавить в корзину ...
+                                    Добавить в корзину ...
                                 </button>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+      $("#plusBtn").click(function () {
+        $("#quantityInput").val(parseInt($("#quantityInput").val()) + 1);
+      });
+
+      $("#minusBtn").click(function () {
+        var currentValue = parseInt($("#quantityInput").val());
+        if (currentValue > 1) {
+          $("#quantityInput").val(currentValue - 1);
+        }
+      });
+    });
+</script>
+

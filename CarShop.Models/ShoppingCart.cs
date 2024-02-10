@@ -17,7 +17,7 @@ namespace CarShop.Models
         [ValidateNever]
         public Product? Product { get; set; }
         [Range(1,5, ErrorMessage = "Пожалуйста, введите значение в диапазоне от 1 до 5")]
-        public int Count { get; set; }
+        public int Count { get; set; } // Количество выбранного товара
         public string? ApplicationUserId { get; set; }
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]

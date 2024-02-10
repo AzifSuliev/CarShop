@@ -23,11 +23,17 @@ namespace CarShop.Areas.Customer.Controllers
             return View(productList);
         }
 
-        public IActionResult Details(int? productId)
+        public IActionResult Details(int productId)
         {
-            Product product = _unitOfWork.Product.
-                Get(u => u.Id == productId, includeCategoryProperties: "Category", includeBrandProperties: "Brand");
-            return View(product);
+            ShoppingCart shoppingCart = new()
+            {
+                Product = _unitOfWork.Product.
+                Get(u => u.Id == productId, includeCategoryProperties: "Category",
+                includeBrandProperties: "Brand"),
+                Count = 1,
+                ProductId = productId
+            };
+            return View(shoppingCart);
         }
         public IActionResult Privacy()
         {

@@ -1,12 +1,12 @@
-﻿@model Product
+﻿@model ShoppingCart
 
 <form method="post">
     <div class="card shadow border-0 mt-4">
         <div class="card-header bg-secondary bg-gradient text-light py-4">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h3 class="text-white text-uppercase">@Model.Brand.Name</h3>
-                    <p class="text-white-50 fw-semibold mb-0">@Model.CarName</p>
+                    <h3 class="text-white text-uppercase">@Model.Product.Brand.Name</h3>
+                    <p class="text-white-50 fw-semibold mb-0">@Model.Product.CarName</p>
                 </div>
             </div>
         </div>
@@ -21,12 +21,12 @@
                 </div>
                 <div class="row">
                     <div class="col-12 col-lg-3 offset-lg-1 text-center mb-3">
-                        <img src="@Model.ImageURL" width="100%" class="rounded" />
+                        <img src="@Model.Product.ImageURL" width="100%" class="rounded" />
                     </div>
                     <div class="col-12 col-lg-6 offset-lg-1">
 
                         <div class="col-12 col-md-6 pb-4">
-                            <span class="badge">Тип кузова: @Model.Category.Name</span>
+                            <span class="badge">Тип кузова: @Model.Product.Category.Name</span>
                         </div>
                         <div class="row text-center ps-2">
                             <div class="p-1 col-3 col-lg-5 bg-white border-bottom">
@@ -38,28 +38,28 @@
                         </div>
                         <div class="row text-center ps-2">
                             <div class="p-1 col-3 col-lg-5 bg-white text-warning fw-bold">
-                                <div>@Model.basicEquipmentPrice.ToString("c")</div>
+                                <div>@Model.Product.basicEquipmentPrice.ToString("c")</div>
                             </div>
                             <div class="p-1 col-3 col-lg-5 bg-white text-warning fw-bold">
-                                <div>@Model.fullEquipmentPrice.ToString("c")</div>
+                                <div>@Model.Product.fullEquipmentPrice.ToString("c")</div>
                             </div>
                         </div>
                         <div class="row pl-2 my-3">
                             <p class="text-secondary lh-sm">Описание</p>
-                            <p>@Model.Description</p>
+                            <p>@Model.Product.Description</p>
                         </div>
-
-                        <div class="input-group mb-3" style="width:100px">
-                            <button class="btn btn-outline-secondary"  type="button" id="minusBtn">-</button>
-                            <input type="text" class="form-control text-center" value="1" id="quantityInput">
-                            <button class="btn btn-outline-secondary" type="button" id="plusBtn">+</button>
-                        </div>
-
+                        <span class="input-group-text bg-primary text-white border-0 fw-semibold" style="width:100px"
+                            id="inputGroup-sizing-default">
+                            Count
+                        </span>
+                        <input asp-for="Count" type="number" value="1" class="form-control text-end my-2" style="width:100px"
+                            aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>
+                        
                         <div class="row">
                             <div class="col-12 col-md-6 pb-1">
-                                <button type="submit" disabled
+                                <button type="submit" 
                                         class="btn btn-primary bg-gradient  w-100 py-2 text-uppercase fw-semibold">
-                                    Добавить в корзину ...
+                                    Добавить в корзину
                                 </button>
                             </div>
                         </div>
@@ -69,20 +69,4 @@
         </div>
     </div>
 </form>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-      $("#plusBtn").click(function () {
-        $("#quantityInput").val(parseInt($("#quantityInput").val()) + 1);
-      });
-
-      $("#minusBtn").click(function () {
-        var currentValue = parseInt($("#quantityInput").val());
-        if (currentValue > 1) {
-          $("#quantityInput").val(currentValue - 1);
-        }
-      });
-    });
-</script>
 

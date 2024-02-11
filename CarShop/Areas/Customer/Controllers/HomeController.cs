@@ -1,7 +1,9 @@
 using CarShop.DataAccess.Repository.IRepository;
 using CarShop.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace CarShop.Areas.Customer.Controllers
 {
@@ -34,6 +36,36 @@ namespace CarShop.Areas.Customer.Controllers
                 ProductId = productId
             };
             return View(shoppingCart);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            shoppingCart.ApplicationUserId = userId;
+
+
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId &&
+            u.ProductId == shoppingCart.ProductId);
+
+            if(cartFromDb != null)
+            {
+                // корзина существует
+                cartFromDb.Count += shoppingCart.Count; // обновление количества существующей корзины
+                _unitOfWork.ShoppingCart.Update(cartFromDb); // обновление всего экземпляра корзины
+            }
+            else
+            {
+                // добавить корзину
+                _unitOfWork.ShoppingCart.Add(shoppingCart);
+            }
+            TempData["success"] = "Корзина была успешно обновлена";
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index)); // метод nameOf() перенаправляет резуьтат метода Details()
+                                                    // в то представление, которое указано в качестве аргумента,
+                                                    // в данном случае - это представление Index
         }
         public IActionResult Privacy()
         {

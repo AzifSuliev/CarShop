@@ -32,7 +32,7 @@ namespace CarShop.DataAccess.Repository
         public T Get(Expression<Func<T, bool>> filter, string? includeCategoryProperties = null, string? includeBrandProperties = null, bool tracked = false)
         {
             IQueryable<T> query;
-            if (tracked)  query = dbSet;
+            if (tracked) query = dbSet;
             else query = dbSet.AsNoTracking();
             query = query.Where(filter);
             // Проверка на null
@@ -53,9 +53,13 @@ namespace CarShop.DataAccess.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(string? includeCategoryProperties = null, string? includeBrandProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeCategoryProperties = null, string? includeBrandProperties = null)
         {
             IQueryable<T> query = dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
             // Проверка на null
             if (!string.IsNullOrEmpty(includeCategoryProperties) && !string.IsNullOrEmpty(includeBrandProperties))
             {

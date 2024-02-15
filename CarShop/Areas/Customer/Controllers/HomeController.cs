@@ -32,7 +32,8 @@ namespace CarShop.Areas.Customer.Controllers
                 Product = _unitOfWork.Product.
                 Get(u => u.Id == productId, includeCategoryProperties: "Category",
                 includeBrandProperties: "Brand"),
-                Count = 1,
+                CountBasic = 0,
+                CountFull = 0,
                 ProductId = productId
             };
             return View(shoppingCart);
@@ -54,7 +55,8 @@ namespace CarShop.Areas.Customer.Controllers
             if(cartFromDb != null)
             {
                 // корзина существует
-                cartFromDb.Count += shoppingCart.Count; // обновление количества существующей корзины
+                cartFromDb.CountBasic += shoppingCart.CountBasic; // обновление количества существующей корзины
+                cartFromDb.CountFull += shoppingCart.CountFull;
                 _unitOfWork.ShoppingCart.Update(cartFromDb); // обновление всего экземпл€ра корзины
             }
             else

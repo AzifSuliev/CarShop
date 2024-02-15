@@ -49,17 +49,25 @@
                             <p class="text-secondary lh-sm">Описание</p>
                             <p>@Model.Product.Description</p>
                         </div>
-                        <span class="input-group-text bg-primary text-white border-0 fw-semibold" style="width:100px"
-                            id="inputGroup-sizing-default">
-                            Count
-                        </span>
-                        <input asp-for="Count" type="number" value="1" class="form-control text-end my-2" style="width:100px"
-                            aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>
-                        
+                        <div class="row pr-2 my-2 mx-1">
+                            <span class="input-group-text bg-primary text-white border-0 fw-semibold" style="width:100px;height:40px"
+                                  id="inputGroup-sizing-default">
+                                Базовая
+                            </span>
+                            <input asp-for="CountBasic" type="number" value="0" class="form-control text-end mx-2" style="width:80px;border-color:black"
+                                   aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+                            <span class="input-group-text bg-primary text-white border-0 fw-semibold" style="width:100px;height:40px"
+                                  id="inputGroup-sizing-default">
+                                Полная
+                            </span>
+                            <input asp-for="CountFull" type="number" value="0" class="form-control text-end mx-2" style="width:80px;border-color:black"
+                                   aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+                        </div>
+
                         <div class="row">
                             <div class="col-12 col-md-6 pb-1">
-                                <button type="submit" 
-                                        class="btn btn-primary bg-gradient  w-100 py-2 text-uppercase fw-semibold">
+                                <button type="submit"
+                                        class="btn btn-primary bg-gradient py-2 text-uppercase fw-semibold" style="width:400px">
                                     Добавить в корзину
                                 </button>
                             </div>

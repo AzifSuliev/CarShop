@@ -16,8 +16,11 @@ namespace CarShop.Models
         [ForeignKey("ProductId")]
         [ValidateNever]
         public Product? Product { get; set; }
-        [Range(1,5, ErrorMessage = "Пожалуйста, введите значение в диапазоне от 1 до 5")]
-        public int Count { get; set; } // Количество выбранного товара
+        [Range(0,5, ErrorMessage = "Пожалуйста, введите значение в диапазоне от 1 до 5")]
+        public int CountBasic { get; set; } // Количество выбранного товара (базовая комплектация)
+        [Range(0, 5, ErrorMessage = "Пожалуйста, введите значение в диапазоне от 1 до 5")]
+        public int CountFull { get; set; } // Количество выбранного товара (полная комплектация)
+
         public string? ApplicationUserId { get; set; }
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]

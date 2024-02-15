@@ -1,4 +1,5 @@
 ﻿using CarShop.DataAccess.Repository.IRepository;
+using CarShop.Models;
 using CarShop.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +26,32 @@ namespace CarShop.Areas.Customer.Controllers
             ShoppingCartVM = new()
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
-                includeCategoryProperties: "", 
-                includeBrandProperties: "")                
+                includeCategoryProperties: "Product", 
+                includeBrandProperties: "Product")                
             };
+
+            int amountOfCars = 0;
+
+            foreach(ShoppingCart cart in ShoppingCartVM.ShoppingCartList)
+            {
+                ShoppingCartVM.OrderTotal += GetPriceBasedOnEquipment(cart);
+                amountOfCars += cart.CountBasic + cart.CountFull;
+            }
+
+            // Если в корзине 2 и больше единиц товара, то скидка 5 %
+            if (amountOfCars >= 2) ShoppingCartVM.OrderTotal *= 0.95;
 
             return View(ShoppingCartVM);
         }
+
+        // Метод для вычисления суммы для каждой записи в корзину
+        private double GetPriceBasedOnEquipment(ShoppingCart shoppingCart) 
+        {
+            double totalPrice; // общая сумма записи для каждого Id
+            totalPrice = shoppingCart.Product.basicEquipmentPrice * shoppingCart.CountBasic + 
+                shoppingCart.Product.fullEquipmentPrice * shoppingCart.CountFull;  
+            return totalPrice;
+        }
+
     }
 }

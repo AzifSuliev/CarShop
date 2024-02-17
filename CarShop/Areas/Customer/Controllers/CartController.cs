@@ -3,6 +3,7 @@ using CarShop.Models;
 using CarShop.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using System.Security.Claims;
 
 namespace CarShop.Areas.Customer.Controllers
@@ -26,13 +27,13 @@ namespace CarShop.Areas.Customer.Controllers
             ShoppingCartVM = new()
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
-                includeCategoryProperties: "Product", 
-                includeBrandProperties: "Product")                
+                includeCategoryProperties: "Product.Category",
+                includeBrandProperties: "Product.Brand"
+                )
             };
 
             int amountOfCars = 0;
-
-            foreach(ShoppingCart cart in ShoppingCartVM.ShoppingCartList)
+            foreach (ShoppingCart cart in ShoppingCartVM.ShoppingCartList)
             {
                 ShoppingCartVM.OrderTotal += GetPriceBasedOnEquipment(cart);
                 amountOfCars += cart.CountBasic + cart.CountFull;
@@ -45,13 +46,12 @@ namespace CarShop.Areas.Customer.Controllers
         }
 
         // Метод для вычисления суммы для каждой записи в корзину
-        private double GetPriceBasedOnEquipment(ShoppingCart shoppingCart) 
+        private double GetPriceBasedOnEquipment(ShoppingCart shoppingCart)
         {
             double totalPrice; // общая сумма записи для каждого Id
-            totalPrice = shoppingCart.Product.basicEquipmentPrice * shoppingCart.CountBasic + 
-                shoppingCart.Product.fullEquipmentPrice * shoppingCart.CountFull;  
+            totalPrice = shoppingCart.Product.basicEquipmentPrice * shoppingCart.CountBasic +
+                shoppingCart.Product.fullEquipmentPrice * shoppingCart.CountFull;
             return totalPrice;
         }
-
     }
 }

@@ -44,6 +44,67 @@ namespace CarShop.Areas.Customer.Controllers
 
             return View(ShoppingCartVM);
         }
+        // прибавить товар (базовая комплектация++)
+        public IActionResult PlusBasicEquipment(int cartId)
+        {
+            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            shoppingCartFromDb.CountBasic++;
+            _unitOfWork.ShoppingCart.Update(shoppingCartFromDb);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
+        // отнять товар (базовая комплектация--)
+        public IActionResult MinusBasicEquipment(int cartId)
+        {
+            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            if ((shoppingCartFromDb.CountBasic + shoppingCartFromDb.CountFull <= 1) && shoppingCartFromDb.CountBasic == 1)
+            {
+                _unitOfWork.ShoppingCart.Remove(shoppingCartFromDb);
+            }
+            else if (shoppingCartFromDb.CountBasic >= 1)
+            {
+                shoppingCartFromDb.CountBasic--;
+                _unitOfWork.ShoppingCart.Update(shoppingCartFromDb);
+            }
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+        // прибавить товар (полная комплектация ++)
+        public IActionResult PlusFullEquipment(int cartId)
+        {
+            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            shoppingCartFromDb.CountFull++;
+            _unitOfWork.ShoppingCart.Update(shoppingCartFromDb);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // отнять товар (полная комплектация --)
+        public IActionResult MinusFullEquipment(int cartId)
+        {
+            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            if ((shoppingCartFromDb.CountFull + shoppingCartFromDb.CountBasic <= 1) && (shoppingCartFromDb.CountFull == 1))
+            {
+                _unitOfWork.ShoppingCart.Remove(shoppingCartFromDb);
+            }
+            else if(shoppingCartFromDb.CountFull >= 1)
+            {
+                shoppingCartFromDb.CountFull--;
+                _unitOfWork.ShoppingCart.Update(shoppingCartFromDb);
+            }
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult RemoveCart(int cartId)
+        {
+            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            _unitOfWork.ShoppingCart.Remove(shoppingCartFromDb);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
 
         // Метод для вычисления суммы для каждой записи в корзину
         private double GetPriceBasedOnEquipment(ShoppingCart shoppingCart)

@@ -44,6 +44,12 @@ namespace CarShop.Areas.Customer.Controllers
 
             return View(ShoppingCartVM);
         }
+
+        public IActionResult Summary()
+        {
+            return View();
+        }
+
         // прибавить товар (базовая комплектация++)
         public IActionResult PlusBasicEquipment(int cartId)
         {

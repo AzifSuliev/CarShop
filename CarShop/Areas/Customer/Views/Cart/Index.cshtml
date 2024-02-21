@@ -1,7 +1,7 @@
 ﻿@model ShoppingCartVM
 
 <head>
-    <link rel="stylesheet" href="~/css/cartStyle.css"/>
+    <link rel="stylesheet" href="~/css/cartStyle.css" />
 </head>
 <form method="post">
     <br />
@@ -37,8 +37,12 @@
                             <div class="col-12  col-lg-5 text-center row">
                                 <div class="col-3 text-md-right pt-2 pt-md-4">
                                     <h6 class="fw-semibold">
-                                        <span class="text-muted" style="font-size: 14px;">
+                                        <span class="text-muted" style="font-size: 16px;">
                                             @((item.Product.fullEquipmentPrice * item.CountFull + item.Product.basicEquipmentPrice * item.CountBasic).ToString("c"))
+                                            @{
+                                                    <h6>БК: @item.CountBasic</h6>
+                                                    <h6>ПК: @item.CountFull</h6>
+                                            }
                                         </span>
                                     </h6>
                                 </div>
@@ -80,8 +84,25 @@
                     <div class="col-md-4 offset-md-4">
                         <ul class="list-group mb-4">
                             <li class="d-flex justify-content-between align-items-center">
-                                <h5 class="text-dark fw-semibold" style="font-size:20px">Общая стоимость @Model.OrderTotal.ToString("c")</h5>
+                                <h5 class="text-dark fw-semibold" style="font-size:20px">Общая стоимость @Model.OrderHeader.OrderTotal.ToString("c")</h5>
                                 <h4 class="text-dark fw-bolder"></h4>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center">
+                                @{
+                                    int amountOfItems = 0;
+                                    foreach (ShoppingCart cart in Model.ShoppingCartList)
+                                    {
+                                        amountOfItems += cart.CountFull + cart.CountBasic;
+                                    }
+                                    if (amountOfItems >= 2)
+                                    {
+                                        <h5>Скидка 5%</h5>
+                                    }
+                                    else
+                                    {
+                                        <h5>Скидка 0%</h5>
+                                    }
+                                }
                             </li>
                         </ul>
                     </div>

@@ -29,18 +29,20 @@ namespace CarShop.Areas.Customer.Controllers
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
                 includeCategoryProperties: "Product.Category",
                 includeBrandProperties: "Product.Brand"
-                )
+                ),
+                OrderHeader = new()
             };
 
             int amountOfCars = 0;
             foreach (ShoppingCart cart in ShoppingCartVM.ShoppingCartList)
             {
-                ShoppingCartVM.OrderTotal += GetPriceBasedOnEquipment(cart);
+                ShoppingCartVM.OrderHeader.OrderTotal += GetPriceBasedOnEquipment(cart);
                 amountOfCars += cart.CountBasic + cart.CountFull;
             }
 
+
             // Если в корзине 2 и больше единиц товара, то скидка 5 %
-            if (amountOfCars >= 2) ShoppingCartVM.OrderTotal *= 0.95;
+            if (amountOfCars >= 2) ShoppingCartVM.OrderHeader.OrderTotal *= 0.95;
 
             return View(ShoppingCartVM);
         }

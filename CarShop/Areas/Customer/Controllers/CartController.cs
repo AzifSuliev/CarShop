@@ -49,7 +49,38 @@ namespace CarShop.Areas.Customer.Controllers
 
         public IActionResult Summary()
         {
-            return View();
+            // Этот код нужен для извлечения идентификатора пользователя
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCartVM = new()
+            {
+                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
+                includeCategoryProperties: "Product.Category",
+                includeBrandProperties: "Product.Brand"
+                ),
+                OrderHeader = new()
+            };
+
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+
+            ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.Name;
+            ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
+            ShoppingCartVM.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.ApplicationUser.StreetAddres;
+            ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.ApplicationUser.City;
+            ShoppingCartVM.OrderHeader.State = ShoppingCartVM.OrderHeader.ApplicationUser.State;
+            ShoppingCartVM.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.ApplicationUser.PostalCode;
+            int amountOfCars = 0;
+            foreach (ShoppingCart cart in ShoppingCartVM.ShoppingCartList)
+            {
+                ShoppingCartVM.OrderHeader.OrderTotal += GetPriceBasedOnEquipment(cart);
+                amountOfCars += cart.CountBasic + cart.CountFull;
+            }
+
+            // Если в корзине 2 и больше единиц товара, то скидка 5 %
+            if (amountOfCars >= 2) ShoppingCartVM.OrderHeader.OrderTotal *= 0.95;
+
+            return View(ShoppingCartVM);
         }
 
         // прибавить товар (базовая комплектация++)

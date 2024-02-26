@@ -25,5 +25,11 @@ namespace CarShop.Models
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]
         public ApplicationUser? ApplicationUser { get; set; }
+
+        [NotMapped]
+        public double BasicEquipmentPrice { get; set; }
+        [NotMapped]
+        public double FullEquipmentPrice { get; set; }
+
     }
 }

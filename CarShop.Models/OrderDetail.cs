@@ -24,7 +24,9 @@ namespace CarShop.Models
         [ValidateNever]
         public Product Product { get; set; }
 
-        public int Count { get; set; }
-        public double Price { get; set; }
+        public int CountBasic { get; set; }
+        public int CountFull { get; set; }
+        public double BasicEquipmentPrice { get; set; }
+        public double FullEquipmentPrice { get; set; }
     }
 }

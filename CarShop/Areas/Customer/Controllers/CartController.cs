@@ -1,6 +1,7 @@
 ﻿using CarShop.DataAccess.Repository.IRepository;
 using CarShop.Models;
 using CarShop.Models.ViewModels;
+using CarShop.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -13,6 +14,7 @@ namespace CarShop.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
         public CartController(IUnitOfWork unitOfWork)
         {
@@ -81,6 +83,79 @@ namespace CarShop.Areas.Customer.Controllers
             if (amountOfCars >= 2) ShoppingCartVM.OrderHeader.OrderTotal *= 0.95;
 
             return View(ShoppingCartVM);
+        }
+
+        [HttpPost]
+        [ActionName("Summary")]
+        public IActionResult SummaryPOST()
+        {
+            // Этот код нужен для извлечения идентификатора пользователя
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCartVM.ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
+                includeCategoryProperties: "Product.Category",
+                includeBrandProperties: "Product.Brand");
+
+            ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
+            ShoppingCartVM.OrderHeader.ApplicationUserId = userId;
+
+            ApplicationUser applicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+
+            int amountOfCars = 0;
+            foreach (ShoppingCart cart in ShoppingCartVM.ShoppingCartList)
+            {
+                ShoppingCartVM.OrderHeader.OrderTotal += GetPriceBasedOnEquipment(cart);
+                amountOfCars += cart.CountBasic + cart.CountFull;
+            }
+
+            // Если в корзине 2 и больше единиц товара, то скидка 5 %
+            if (amountOfCars >= 2) ShoppingCartVM.OrderHeader.OrderTotal *= 0.95;
+
+            if (applicationUser.CompanyId.GetValueOrDefault() == 0)
+            {
+                // если условие истинно, то этот аккаунт является аккаунтом покупателя,
+                ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending; // Статус оплаты в ожидании
+                ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending; // Статус заказа в ожидании
+            }
+            else
+            {
+                // это компания
+                ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusApproved; // Статус оплаты подтверждён 
+                ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusApproved; // Статус заказа подтверждён
+            }
+
+            _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader); // Добавление в базу данных заказа
+            _unitOfWork.Save(); // Сохранение базы данных
+
+            foreach(var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                OrderDetail orderDetail = new()
+                {
+                    ProductId = cart.ProductId,
+                    OrderHeaderId = ShoppingCartVM.OrderHeader.Id,
+                    CountBasic = cart.CountBasic,
+                    CountFull = cart.CountFull,
+                    BasicEquipmentPrice = cart.BasicEquipmentPrice,
+                    FullEquipmentPrice = cart.FullEquipmentPrice
+                };
+                _unitOfWork.OrderDetail.Add(orderDetail);
+                _unitOfWork.Save();
+            }
+
+            if (applicationUser.CompanyId.GetValueOrDefault() == 0)
+            {
+                // если условие истинно, то этот аккаунт является аккаунтом покупателя,
+                // в таком случае мы должны потребовать оплату
+                // логика Stripe
+            }
+
+            return RedirectToAction(nameof(OrderConfirmation), new { Id = ShoppingCartVM.OrderHeader.Id});
+        }
+
+        public IActionResult OrderConfirmation(int Id)
+        {
+            return View(Id);
         }
 
         // прибавить товар (базовая комплектация++)

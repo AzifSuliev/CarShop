@@ -5,6 +5,8 @@ using CarShop.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using Stripe;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace CarShop.Areas.Customer.Controllers
@@ -110,7 +112,8 @@ namespace CarShop.Areas.Customer.Controllers
             }
 
             // Если в корзине 2 и больше единиц товара, то скидка 5 %
-            if (amountOfCars >= 2) ShoppingCartVM.OrderHeader.OrderTotal *= 0.95;
+            double discount = 0.95;
+            if (amountOfCars >= 2) ShoppingCartVM.OrderHeader.OrderTotal *= discount;
 
             if (applicationUser.CompanyId.GetValueOrDefault() == 0)
             {
@@ -128,7 +131,7 @@ namespace CarShop.Areas.Customer.Controllers
             _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader); // Добавление в базу данных заказа
             _unitOfWork.Save(); // Сохранение базы данных
 
-            foreach(var cart in ShoppingCartVM.ShoppingCartList)
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
                 OrderDetail orderDetail = new()
                 {
@@ -148,9 +151,73 @@ namespace CarShop.Areas.Customer.Controllers
                 // если условие истинно, то этот аккаунт является аккаунтом покупателя,
                 // в таком случае мы должны потребовать оплату
                 // логика Stripe
+
+                StripeConfiguration.ApiKey = "sk_test_51OoQctFmqGqHHR4uCCp7XjDux9y0Qm55nzaI4q91OEW4yJuPha6jsL2HLZY0uy4GLyYkXzCFuVdvigYKzNb6l90Y00882tKj9e";
+
+                var domain = "https://localhost:7029/";
+                var options = new SessionCreateOptions
+                {
+                    SuccessUrl = domain + $"customer/cart/OrderConfirmation?Id={ShoppingCartVM.OrderHeader.Id}",
+                    CancelUrl = domain + "customer/cart/index",
+                    LineItems = new List<SessionLineItemOptions>(),
+                    Mode = "payment",
+                    PaymentMethodTypes = new List<string>
+                    {
+                        "card" // Замените на нужные вам методы оплаты
+                    }
+                };
+
+                if (amountOfCars >= 2) // количество товара >= 2 -- есть скидка
+                {
+                    foreach (var item in ShoppingCartVM.ShoppingCartList)
+                    {
+                        double exchangeRate = 92.05;
+                        var sessionLineItem = new SessionLineItemOptions
+                        {
+                            PriceData = new SessionLineItemPriceDataOptions
+                            {
+                                UnitAmount = (long)((item.Product.basicEquipmentPrice * item.CountBasic * 100 + item.Product.fullEquipmentPrice * item.CountFull * 100) * discount / exchangeRate),
+                                Currency = "usd",
+                                ProductData = new SessionLineItemPriceDataProductDataOptions
+                                {
+                                    Name = item.Product.Brand.Name + " " + item.Product.CarName
+                                }
+                            },
+                            Quantity = item.CountBasic + item.CountFull
+                        };
+                        options.LineItems.Add(sessionLineItem);
+                    }
+                }
+                else // скидки нет 
+                {
+                    foreach (var item in ShoppingCartVM.ShoppingCartList)
+                    {
+                        double exchangeRate = 92.05;
+                        var sessionLineItem = new SessionLineItemOptions
+                        {
+                            PriceData = new SessionLineItemPriceDataOptions
+                            {
+                                UnitAmount = (long)((item.Product.basicEquipmentPrice * item.CountBasic * 100 + item.Product.fullEquipmentPrice * item.CountFull * 100) / exchangeRate),
+                                Currency = "usd",
+                                ProductData = new SessionLineItemPriceDataProductDataOptions
+                                {
+                                    Name = item.Product.Brand.Name + " " + item.Product.CarName
+                                }
+                            },
+                            Quantity = item.CountBasic + item.CountFull
+                        };
+                        options.LineItems.Add(sessionLineItem);
+                    }
+                }
+                var service = new SessionService();
+                Session session = service.Create(options);
+                _unitOfWork.OrderHeader.UpdateStripePaymentId(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
+                _unitOfWork.Save();
+                Response.Headers.Add("Location", session.Url);
+                return new StatusCodeResult(303);
             }
 
-            return RedirectToAction(nameof(OrderConfirmation), new { Id = ShoppingCartVM.OrderHeader.Id});
+            return RedirectToAction(nameof(OrderConfirmation), new { Id = ShoppingCartVM.OrderHeader.Id });
         }
 
         public IActionResult OrderConfirmation(int Id)
@@ -202,7 +269,7 @@ namespace CarShop.Areas.Customer.Controllers
             {
                 _unitOfWork.ShoppingCart.Remove(shoppingCartFromDb);
             }
-            else if(shoppingCartFromDb.CountFull >= 1)
+            else if (shoppingCartFromDb.CountFull >= 1)
             {
                 shoppingCartFromDb.CountFull--;
                 _unitOfWork.ShoppingCart.Update(shoppingCartFromDb);

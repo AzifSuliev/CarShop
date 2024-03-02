@@ -29,7 +29,8 @@ namespace CarShop.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeCategoryProperties = null, string? includeBrandProperties = null, bool tracked = false)
+        public T Get(Expression<Func<T, bool>> filter, string? includeCategoryProperties = null, string? includeBrandProperties = null, 
+            bool tracked = false, string? includeProperties = null)
         {
             IQueryable<T> query;
             if (tracked) query = dbSet;
@@ -50,10 +51,17 @@ namespace CarShop.DataAccess.Repository
                     query = query.Include(includeProp);
                 }
             }
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeCategoryProperties = null, string? includeBrandProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeCategoryProperties = null, string? includeBrandProperties = null, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
@@ -71,6 +79,13 @@ namespace CarShop.DataAccess.Repository
 
                 foreach (var includeProp in includeBrandProperties.
                     Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);
                 }

@@ -16,8 +16,8 @@ namespace CarShop.DataAccess.Repository.IRepository
     {
         // T - Category
 
-        IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeCategoryProperties = null, string? includeBrandProperties = null);
-        T Get(Expression<Func<T, bool>> filter, string? includeCategoryProperties = null, string? includeBrandProperties = null, bool tracked = false);
+        IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeCategoryProperties = null, string? includeBrandProperties = null, string? includeProperties = null);
+        T Get(Expression<Func<T, bool>> filter, string? includeCategoryProperties = null, string? includeBrandProperties = null, bool tracked = false, string? includeProperties = null);
         
         // Методы для создания и удаления сущностей
         void Add(T entity);

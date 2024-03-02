@@ -220,8 +220,29 @@ namespace CarShop.Areas.Customer.Controllers
             return RedirectToAction(nameof(OrderConfirmation), new { Id = ShoppingCartVM.OrderHeader.Id });
         }
 
-        public IActionResult OrderConfirmation(int Id)
+        public IActionResult OrderConfirmation(int Id) // Подтверждение заказа
         {
+            // Извлечение объекта orderHeader из БД
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == Id, includeProperties: "ApplicationUser");
+
+            if(orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment) // если статус оплаты не отложен на время, то это
+            {                                                               //  заказ обычного покупателя, а не компании               
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.SessionId);
+                if(session.PaymentStatus.ToLower() == "paid") // ключевое слово "paid" относится к Stripe
+                                                              // если статус оплаты объекта session соответствует "paid",
+                                                              // то происходит обновление статуса
+                {
+                    _unitOfWork.OrderHeader.UpdateStripePaymentId(Id, session.Id, session.PaymentIntentId);
+                    _unitOfWork.OrderHeader.UpdateStatus(Id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    _unitOfWork.Save();
+                }
+            }
+            // после произведения оплаты, удаляется содержимое корзины
+            List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.
+                GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+            _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+            _unitOfWork.Save();
             return View(Id);
         }
 

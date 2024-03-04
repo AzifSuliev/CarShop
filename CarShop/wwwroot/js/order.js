@@ -1,13 +1,35 @@
 ﻿var dataTable;
 $(document).ready(function () {
+    var url = window.location.search;
+    if (url.includes("inprocess")) {
+        loadDataTable("inprocess");
+    }
+    else {
+        if (url.includes("completed")) {
+            loadDataTable("completed");
+        }
+        else {
+            if (url.includes("paymentPending")) {
+                loadDataTable("paymentPending");
+            }
+            else {
+                if (url.includes("approved")) {
+                    loadDataTable("approved");
+                }
+                else {
+                    loadDataTable("all");
+                }
+            }
+        }
+    }
     loadDataTable();
 });
 
 
-function loadDataTable() {
+function loadDataTable(status) {
     // код из вкладки Ajax сайта DataTables
     dataTable = $('#tblData').DataTable({
-        "ajax": { url: '/admin/order/getall' }, // путь к методу getall
+        "ajax": { url: '/admin/order/getall?status=' + status }, // путь к методу getall
         // код из вкладки Data сайта DataTables
         "columns": [
             { data: 'id', "width": "10%" },

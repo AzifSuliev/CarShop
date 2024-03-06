@@ -225,8 +225,8 @@ namespace CarShop.Areas.Customer.Controllers
             // Извлечение объекта orderHeader из БД
             OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == Id, includeProperties: "ApplicationUser");
 
-            if(orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment) // если статус оплаты не отложен на время, то это
-            {                                                               //  заказ обычного покупателя, а не компании               
+            if(orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment) 
+            {                                                               // это заказ обычного покупателя, а не компании               
                 var service = new SessionService();
                 Session session = service.Get(orderHeader.SessionId);
                 if(session.PaymentStatus.ToLower() == "paid") // ключевое слово "paid" относится к Stripe

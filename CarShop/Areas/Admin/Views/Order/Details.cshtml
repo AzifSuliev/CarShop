@@ -1,5 +1,6 @@
 ﻿@model OrderVM
 <form method="post">
+    <input asp-for="OrderHeader.Id" hidden />
     <br />
     <div class="container">
         <div class="card">
@@ -115,7 +116,7 @@
                             <div class="row my-1">
                                 <div class="col-3">Дата заказа</div>
                                 <div class="col-9">
-                                    <input value="OrderHeader.OrderDate.ToShortDateString()" readonly type="text" class="form-control" />
+                                    <input value="@Model.OrderHeader.OrderDate.ToShortDateString()" readonly type="text" class="form-control" />
                                 </div>
                             </div>
                             <div class="row my-1">
@@ -192,7 +193,7 @@
                             </div>
                             @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
                             {
-                                <input type="submit" class="btn btn-warning form-control my-1" value="Обновить детали заказа" />
+                                <button type="submit" asp-action="UpdateOrderDetail" class="btn btn-warning form-control my-1">Обновить детали заказа</button>
                             }
 
                         </div>

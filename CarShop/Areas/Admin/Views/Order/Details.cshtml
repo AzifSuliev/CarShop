@@ -241,10 +241,28 @@
                                     </div>
                                 </li>
                             </ul>
-                            <input type="submit" class="btn btn-success form-control my-1" value="Оплатить сейчас" />
-                            <input type="submit" class="btn btn-primary form-control my-1" value="Начать процесс" />
-                            <input type="submit" class="btn btn-primary form-control my-1" value="Выгрузить заказ" />
-                            <input type="submit" class="btn btn-danger form-control my-1" value="Отменить заказ" />
+                            @if (Model.OrderHeader.PaymentStatus == SD.PaymentStatusDelayedPayment &&
+                            Model.OrderHeader.OrderStatus == SD.StatusShipped)
+                            {
+                                <button type="submit" class="btn btn-success form-control my-1">Оплатить сейчас</button>
+                            }
+                            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                            {
+                                if (Model.OrderHeader.OrderStatus == SD.StatusApproved)
+                                {
+                                    <button type="submit" class="btn btn-primary form-control my-1">Начать процесс</button>
+                                }
+                                if (Model.OrderHeader.OrderStatus == SD.StatusInProcess)
+                                {
+                                    <button type="submit" class="btn btn-primary form-control my-1">Выгрузить заказ</button>
+                                }
+                                if (Model.OrderHeader.OrderStatus != SD.StatusRefunded &&
+                                Model.OrderHeader.OrderStatus != SD.StatusCancelled &&
+                                Model.OrderHeader.OrderStatus != SD.StatusShipped)
+                                {
+                                    <button type="submit" class="btn btn-danger form-control my-1">Отменить заказ</button>
+                                }
+                            }
                         </div>
                     </div>
                 </div>

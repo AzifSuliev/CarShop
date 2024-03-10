@@ -183,7 +183,7 @@ namespace CarShop.Areas.Customer.Controllers
                                     Name = item.Product.Brand.Name + " " + item.Product.CarName
                                 }
                             },
-                            Quantity = item.CountBasic + item.CountFull
+                            Quantity = 1
                         };
                         options.LineItems.Add(sessionLineItem);
                     }
@@ -204,7 +204,7 @@ namespace CarShop.Areas.Customer.Controllers
                                     Name = item.Product.Brand.Name + " " + item.Product.CarName
                                 }
                             },
-                            Quantity = item.CountBasic + item.CountFull
+                            Quantity = 1
                         };
                         options.LineItems.Add(sessionLineItem);
                     }
@@ -226,7 +226,7 @@ namespace CarShop.Areas.Customer.Controllers
             OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == Id, includeProperties: "ApplicationUser");
 
             if(orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment) 
-            {                                                               // это заказ обычного покупателя, а не компании               
+            {                                                                          
                 var service = new SessionService();
                 Session session = service.Get(orderHeader.SessionId);
                 if(session.PaymentStatus.ToLower() == "paid") // ключевое слово "paid" относится к Stripe

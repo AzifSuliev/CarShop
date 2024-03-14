@@ -258,10 +258,13 @@ namespace CarShop.Areas.Customer.Controllers
         // отнять товар (базовая комплектация--)
         public IActionResult MinusBasicEquipment(int cartId)
         {
-            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId, tracked: true);
             if ((shoppingCartFromDb.CountBasic + shoppingCartFromDb.CountFull <= 1) && shoppingCartFromDb.CountBasic == 1)
             {
                 _unitOfWork.ShoppingCart.Remove(shoppingCartFromDb);
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll
+               (u => u.ApplicationUserId == shoppingCartFromDb.ApplicationUserId).Count() - 1);
+                _unitOfWork.Save();
             }
             else if (shoppingCartFromDb.CountBasic >= 1)
             {
@@ -285,10 +288,13 @@ namespace CarShop.Areas.Customer.Controllers
         // отнять товар (полная комплектация --)
         public IActionResult MinusFullEquipment(int cartId)
         {
-            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId, tracked: true);
             if ((shoppingCartFromDb.CountFull + shoppingCartFromDb.CountBasic <= 1) && (shoppingCartFromDb.CountFull == 1))
             {
                 _unitOfWork.ShoppingCart.Remove(shoppingCartFromDb);
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll
+               (u => u.ApplicationUserId == shoppingCartFromDb.ApplicationUserId).Count() - 1);
+                _unitOfWork.Save();
             }
             else if (shoppingCartFromDb.CountFull >= 1)
             {
@@ -302,7 +308,9 @@ namespace CarShop.Areas.Customer.Controllers
 
         public IActionResult RemoveCart(int cartId)
         {
-            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId, tracked: true);
+            HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll
+            (u => u.ApplicationUserId == shoppingCartFromDb.ApplicationUserId).Count() - 1);
             _unitOfWork.ShoppingCart.Remove(shoppingCartFromDb);
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));

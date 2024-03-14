@@ -1,6 +1,8 @@
 using CarShop.DataAccess.Repository.IRepository;
 using CarShop.Models;
+using CarShop.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -19,7 +21,8 @@ namespace CarShop.Areas.Customer.Controllers
         }
 
         public IActionResult Index()
-        {
+        {           
+
             IEnumerable<Product> productList = _unitOfWork.Product.
                 GetAll(includeCategoryProperties: "Category", includeBrandProperties: "Brand");
             return View(productList);
@@ -58,14 +61,16 @@ namespace CarShop.Areas.Customer.Controllers
                 cartFromDb.CountBasic += shoppingCart.CountBasic; // обновление количества существующей корзины
                 cartFromDb.CountFull += shoppingCart.CountFull;
                 _unitOfWork.ShoppingCart.Update(cartFromDb); // обновление всего экземпляра корзины
+                _unitOfWork.Save();
             }
             else
             {
-                // добавить корзину
+                // добавить запись для корзины
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
+                _unitOfWork.Save();
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count());
             }
             TempData["success"] = "Корзина была успешно обновлена";
-            _unitOfWork.Save();
             return RedirectToAction(nameof(Index)); // метод nameOf() перенаправляет резуьтат метода Details()
                                                     // в то представление, которое указано в качестве аргумента,
                                                     // в данном случае - это представление Index

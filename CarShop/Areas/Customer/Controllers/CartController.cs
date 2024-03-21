@@ -15,9 +15,10 @@ namespace CarShop.Areas.Customer.Controllers
     [Authorize]
     public class CartController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+       
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
+        private readonly IUnitOfWork _unitOfWork;
         public CartController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -237,6 +238,7 @@ namespace CarShop.Areas.Customer.Controllers
                     _unitOfWork.OrderHeader.UpdateStatus(Id, SD.StatusApproved, SD.PaymentStatusApproved);
                     _unitOfWork.Save();
                 }
+                HttpContext.Session.Clear();
             }
             // после произведения оплаты, удаляется содержимое корзины
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.

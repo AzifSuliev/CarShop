@@ -170,9 +170,9 @@ namespace CarShop.Areas.Identity.Pages.Account
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
 
-                if(Input.Role == SD.Role_Company) // если роль выбранной модели соответствует роли Company
+                if (Input.Role == SD.Role_Company) // если роль выбранной модели соответствует роли Company
                 {
-                    user.CompanyId = Input.CompanyId; 
+                    user.CompanyId = Input.CompanyId;
                 }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -209,7 +209,17 @@ namespace CarShop.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                        {
+                            // если пользователь - администратор или работник,
+                            // при создании нового пользователя, пользователь не авторизуется
+                            TempData["success"] = "Новый пользователь был успешно создан";
+                        }
+                        else
+                        {
+                            // иначе авторизация пользователя происходит сразу после регистрации
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }

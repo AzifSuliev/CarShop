@@ -19,41 +19,41 @@
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="email" placeholder="Please enter your email."/>
+                <input asp-for="Input.Email" class="form-control" autocomplete="email" placeholder="email."/>
                 <label asp-for="Input.Email" class="form-label"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Name" class="form-control" autocomplete="email" placeholder="Please enter your Name."/>
+                <input asp-for="Input.Name" class="form-control" autocomplete="email" placeholder="Имя."/>
                 <label asp-for="Input.Name" class="form-label"></label>
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="email" placeholder="Please enter your Phone Number." />
+                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="email" placeholder="Номер телефона." />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.StreetAddres" class="form-control" autocomplete="email" placeholder="Please enter your Street Addres." />
+                <input asp-for="Input.StreetAddres" class="form-control" autocomplete="email" placeholder="Адрес." />
                 <label asp-for="Input.StreetAddres" class="form-label"></label>
                 <span asp-validation-for="Input.StreetAddres" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.City" class="form-control" autocomplete="email" placeholder="Please enter your City." />
+                <input asp-for="Input.City" class="form-control" autocomplete="email" placeholder="Город." />
                 <label asp-for="Input.City" class="form-label"></label>
                 <span asp-validation-for="Input.City" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.State" class="form-control" autocomplete="email" placeholder="Please enter your State." />
+                <input asp-for="Input.State" class="form-control" autocomplete="email" placeholder="Регион." />
                 <label asp-for="Input.State" class="form-label"></label>
                 <span asp-validation-for="Input.State" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PostalCode" class="form-control" autocomplete="email" placeholder="Please enter your Postal Code." />
+                <input asp-for="Input.PostalCode" class="form-control" autocomplete="email" placeholder="Почтовый индекс." />
                 <label asp-for="Input.PostalCode" class="form-label"></label>
                 <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Регистрация</button>
         </form>
     </div>
 </div>

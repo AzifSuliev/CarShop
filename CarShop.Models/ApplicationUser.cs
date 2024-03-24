@@ -22,6 +22,8 @@ namespace CarShop.Models
         public int? CompanyId { get; set; } // Внешний ключ
         [ForeignKey("CompanyId")] 
         [ValidateNever]
-        public Company Company { get; set; } // Навигационное свойство
+        public Company? Company { get; set; } // Навигационное свойство
+        [NotMapped]
+        public string Role { get; set; }
     }
 }

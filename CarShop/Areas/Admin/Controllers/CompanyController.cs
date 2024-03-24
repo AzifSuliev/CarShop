@@ -69,6 +69,7 @@ namespace CarShop.Areas.Admin.Controllers
             return Json(new { data = objCompaniesList });
         }
 
+        [HttpDelete]
         public IActionResult Delete(int? Id)
         {
 

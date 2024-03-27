@@ -26,6 +26,7 @@ namespace CarShop.DataAccess.Data
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
@@ -112,8 +113,7 @@ namespace CarShop.DataAccess.Data
                     basicEquipmentPrice = 120000,
                     fullEquipmentPrice = 2000000,
                     CategoryId = 7,
-                    BrandId = 3,
-                    ImageURL = ""
+                    BrandId = 3
                 },
                 new Product
                 {
@@ -123,8 +123,7 @@ namespace CarShop.DataAccess.Data
                     basicEquipmentPrice = 1000000,
                     fullEquipmentPrice = 180000,
                     CategoryId = 1,
-                    BrandId = 3,
-                    ImageURL = ""
+                    BrandId = 3
                 },
                 new Product
                 {
@@ -134,8 +133,7 @@ namespace CarShop.DataAccess.Data
                     basicEquipmentPrice = 1500000,
                     fullEquipmentPrice = 2000000,
                     CategoryId = 6,
-                    BrandId = 4,
-                    ImageURL = ""
+                    BrandId = 4
                 },
                 new Product
                 {
@@ -145,8 +143,7 @@ namespace CarShop.DataAccess.Data
                     basicEquipmentPrice = 700000,
                     fullEquipmentPrice = 850000,
                     CategoryId = 3,
-                    BrandId = 6,
-                    ImageURL = ""
+                    BrandId = 6
                 },
                 new Product
                 {
@@ -156,8 +153,7 @@ namespace CarShop.DataAccess.Data
                     basicEquipmentPrice = 1200000,
                     fullEquipmentPrice = 1400000,
                     CategoryId = 8,
-                    BrandId = 1,
-                    ImageURL = ""
+                    BrandId = 1
                 },
                 new Product
                 {
@@ -167,8 +163,7 @@ namespace CarShop.DataAccess.Data
                     basicEquipmentPrice = 600000,
                     fullEquipmentPrice = 750000,
                     CategoryId = 2,
-                    BrandId = 12,
-                    ImageURL = ""
+                    BrandId = 12
                 },
                 new Product
                 {
@@ -178,8 +173,7 @@ namespace CarShop.DataAccess.Data
                     basicEquipmentPrice = 600000,
                     fullEquipmentPrice = 750000,
                     CategoryId = 1,
-                    BrandId = 9,
-                    ImageURL = ""
+                    BrandId = 9
                 },
                 new Product
                 {
@@ -189,8 +183,7 @@ namespace CarShop.DataAccess.Data
                     basicEquipmentPrice = 600000,
                     fullEquipmentPrice = 750000,
                     CategoryId = 7,
-                    BrandId = 13,
-                    ImageURL = ""
+                    BrandId = 13
                 }
                 );
         }

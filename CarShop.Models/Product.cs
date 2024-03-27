@@ -41,8 +41,8 @@ namespace CarShop.Models
         [ValidateNever]
         public Brand Brand { get; set; }
 
-        // ссылкa (URL) на изображение продукта (автомобиля)
         [ValidateNever]
-        public string ImageURL { get; set; }
+        public List<ProductImage> ProductImages { get; set; }
+
     }
 }

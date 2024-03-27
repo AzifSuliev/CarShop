@@ -96,16 +96,16 @@ s                     string productPath - это переменная, кото
 
 
                     // Если в объекте productVm.Product уже существует URL изображения, то старое изображение удаляется.
-                    if (!string.IsNullOrEmpty(productVm.Product.ImageURL) )
-                    {
-                        // Удаление изображения 
-                        var oldImagePath = 
-                            Path.Combine(wwwRootPath, productVm.Product.ImageURL.TrimStart('\\'));
-                        if(System.IO.File.Exists(oldImagePath))
-                        {
-                            System.IO.File.Delete(oldImagePath);
-                        }
-                    }
+                    //if (!string.IsNullOrEmpty(productVm.Product.ImageURL) )
+                    //{
+                    //    // Удаление изображения 
+                    //    var oldImagePath = 
+                    //        Path.Combine(wwwRootPath, productVm.Product.ImageURL.TrimStart('\\'));
+                    //    if(System.IO.File.Exists(oldImagePath))
+                    //    {
+                    //        System.IO.File.Delete(oldImagePath);
+                    //    }
+                    //}
 
                     // в этой части кода файл загружается на сервер и сохраняется в указанной директории,
                     // а затем путь к этому файлу присваивается свойству ImageURL объекта Product
@@ -113,7 +113,7 @@ s                     string productPath - это переменная, кото
                     {
                         file.CopyTo(fileStream);
                     }
-                    productVm.Product.ImageURL = @"\images\product\" + fileName;
+                    //productVm.Product.ImageURL = @"\images\product\" + fileName;
                 }
 
                 if(productVm.Product.Id == 0)  // Добавление нового объекта при Id равным 0
@@ -170,11 +170,11 @@ s                     string productPath - это переменная, кото
                 return Json( new {success = false, message="Ошибка удаления"});
             }
 
-            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, productToBeDeleted.ImageURL.TrimStart('\\'));
-            if (System.IO.File.Exists(oldImagePath))
-            {
-                System.IO.File.Delete(oldImagePath);
-            }
+           // var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, productToBeDeleted.ImageURL.TrimStart('\\'));
+            //if (System.IO.File.Exists(oldImagePath))
+            //{
+            //    System.IO.File.Delete(oldImagePath);
+            //}
 
             _unitOfWork.Product.Remove(productToBeDeleted);
             _unitOfWork.Save();

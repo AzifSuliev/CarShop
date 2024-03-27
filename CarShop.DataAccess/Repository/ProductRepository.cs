@@ -28,10 +28,10 @@ namespace CarShop.DataAccess.Repository
                 objFromDb.fullEquipmentPrice = entity.fullEquipmentPrice;
                 objFromDb.CategoryId = entity.CategoryId;
                 objFromDb.BrandId = entity.BrandId;
-                if(objFromDb.ImageURL != null)
-                {
-                    objFromDb.ImageURL = entity.ImageURL;
-                }
+                //if(objFromDb.ImageURL != null)
+                //{
+                //    objFromDb.ImageURL = entity.ImageURL;
+                //}
             }
         }
     }

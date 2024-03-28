@@ -28,6 +28,7 @@ namespace CarShop.DataAccess.Repository
                 objFromDb.fullEquipmentPrice = entity.fullEquipmentPrice;
                 objFromDb.CategoryId = entity.CategoryId;
                 objFromDb.BrandId = entity.BrandId;
+                objFromDb.ProductImages = entity.ProductImages;
                 //if(objFromDb.ImageURL != null)
                 //{
                 //    objFromDb.ImageURL = entity.ImageURL;

@@ -24,7 +24,7 @@ namespace CarShop.Areas.Customer.Controllers
         {           
 
             IEnumerable<Product> productList = _unitOfWork.Product.
-                GetAll(includeCategoryProperties: "Category", includeBrandProperties: "Brand");
+                GetAll(includeCategoryProperties: "Category", includeBrandProperties: "Brand", includeProperties: "ProductImages");
             return View(productList);
         }
 
@@ -34,7 +34,7 @@ namespace CarShop.Areas.Customer.Controllers
             {
                 Product = _unitOfWork.Product.
                 Get(u => u.Id == productId, includeCategoryProperties: "Category",
-                includeBrandProperties: "Brand"),
+                includeBrandProperties: "Brand", includeProperties: "ProductImages"),
                 CountBasic = 0,
                 CountFull = 0,
                 ProductId = productId

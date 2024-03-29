@@ -25,7 +25,7 @@ namespace CarShop.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> objProductsList = _unitOfWork.Product.GetAll(includeCategoryProperties:"Category", 
+            List<Product> objProductsList = _unitOfWork.Product.GetAll(includeCategoryProperties: "Category",
                 includeBrandProperties: "Brand").ToList();
             return View(objProductsList);
         }
@@ -37,7 +37,7 @@ namespace CarShop.Areas.Admin.Controllers
         /// <returns></returns>
         public IActionResult Upsert(int? Id) // = Update + Insert
         {
-            
+
             ProductVM productVm = new ProductVM()
             {
                 CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
@@ -53,7 +53,7 @@ namespace CarShop.Areas.Admin.Controllers
                 Product = new Product()
             };
 
-            if(Id == null || Id == 0) // Если выражение истино, то это Create 
+            if (Id == null || Id == 0) // Если выражение истино, то это Create 
             {
                 // create
                 return View(productVm);
@@ -94,7 +94,7 @@ namespace CarShop.Areas.Admin.Controllers
                 if (files != null)
                 {
 
-                    foreach(IFormFile file in files)
+                    foreach (IFormFile file in files)
                     {
                         // Генерируется уникальное имя файла с использованием Guid.NewGuid()
                         string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
@@ -109,7 +109,7 @@ namespace CarShop.Areas.Admin.Controllers
                         string productPath = @"images\products\product-" + productVm.Product.Id;
                         string finalPath = Path.Combine(wwwRootPath, productPath);
 
-                        if(!Directory.Exists(finalPath)) Directory.CreateDirectory(finalPath); // создание папки по указанному пути finalPath, если такой папки не существвет
+                        if (!Directory.Exists(finalPath)) Directory.CreateDirectory(finalPath); // создание папки по указанному пути finalPath, если такой папки не существвет
 
                         // в этой части кода файл загружается на сервер и сохраняется в указанной директории,
                         // а затем путь к этому файлу присваивается свойству ImageURL объекта Product                                                                       
@@ -134,7 +134,7 @@ namespace CarShop.Areas.Admin.Controllers
                     _unitOfWork.Save();
                 }
 
-               
+
                 TempData["success"] = "Выполнено!";
                 return RedirectToAction("Index", "Product");
             }
@@ -154,7 +154,31 @@ namespace CarShop.Areas.Admin.Controllers
 
                 return View(productVm);
 
-            }   
+            }
+        }
+
+        public IActionResult DeleteImage(int imageId)
+        {
+            var imageToBeDeleted = _unitOfWork.ProductImage.Get(u => u.Id == imageId);
+            var productId = imageToBeDeleted.ProductId;
+            if (imageToBeDeleted != null)
+            {
+                if(!string.IsNullOrEmpty(imageToBeDeleted.ImageUrl))
+                {
+                    // Удаление пути к файлу
+                    var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, imageToBeDeleted.ImageUrl.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+                // удаление изображения из БД
+                _unitOfWork.ProductImage.Remove(imageToBeDeleted);
+                _unitOfWork.Save();
+
+                TempData["success"] = "Изображение удалено";
+            }
+            return RedirectToAction(nameof(Upsert), new { id = productId });
         }
 
         #region APICALLS
@@ -164,30 +188,36 @@ namespace CarShop.Areas.Admin.Controllers
         {
             List<Product> objProductsList = _unitOfWork.Product.GetAll(includeCategoryProperties: "Category",
                includeBrandProperties: "Brand").ToList();
-            return Json(new {data = objProductsList });
+            return Json(new { data = objProductsList });
         }
 
-       // [HttpDelete]
+        // [HttpDelete]
         public IActionResult Delete(int? Id)
         {
 
             var productToBeDeleted = _unitOfWork.Product.Get(u => u.Id == Id);
 
-            if(productToBeDeleted == null)
+            if (productToBeDeleted == null)
             {
-                return Json( new {success = false, message="Ошибка удаления"});
+                return Json(new { success = false, message = "Ошибка удаления" });
             }
 
-           // var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, productToBeDeleted.ImageURL.TrimStart('\\'));
-            //if (System.IO.File.Exists(oldImagePath))
-            //{
-            //    System.IO.File.Delete(oldImagePath);
-            //}
+            string productPath = @"images\products\product-" + Id;
+            string finalPath = Path.Combine(_webHostEnvironment.WebRootPath, productPath);
 
+            if (Directory.Exists(finalPath))
+            {
+                string[] filePaths = Directory.GetFiles(finalPath);
+                foreach(var filePath in filePaths)
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                Directory.Delete(finalPath);
+            }
             _unitOfWork.Product.Remove(productToBeDeleted);
             _unitOfWork.Save();
 
-           
+
             return Json(new { success = true, message = "Объект удалён" });
         }
         #endregion

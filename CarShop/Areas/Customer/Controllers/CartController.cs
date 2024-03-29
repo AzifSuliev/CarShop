@@ -38,9 +38,12 @@ namespace CarShop.Areas.Customer.Controllers
                 OrderHeader = new()
             };
 
+            IEnumerable<ProductImage> productImages = _unitOfWork.ProductImage.GetAll();
+
             int amountOfCars = 0;
             foreach (ShoppingCart cart in ShoppingCartVM.ShoppingCartList)
             {
+                cart.Product.ProductImages = productImages.Where(u => u.ProductId == cart.Product.Id).ToList();
                 ShoppingCartVM.OrderHeader.OrderTotal += GetPriceBasedOnEquipment(cart);
                 amountOfCars += cart.CountBasic + cart.CountFull;
             }

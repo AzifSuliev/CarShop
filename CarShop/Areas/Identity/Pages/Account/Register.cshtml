@@ -78,7 +78,6 @@
                                 <option disabled selected class="ms-2 text-muted">-Выберите роль-</option>
                             </select>
                         </div>
-
                         <div class="form-floating mb-3 col-md-6">
                             <select asp-for="Input.CompanyId" style="display:none" asp-items="@Model.Input.CompanyList" class="form-select">
                                 <option disabled selected class="ms-2 text-muted">-Выберите компанию-</option>
@@ -92,7 +91,6 @@
             </div>
             @if (!User.IsInRole(SD.Role_Admin) && !User.IsInRole(SD.Role_Employee))
             {
-
                 <div class="col-md-12 p-3 text-center">
                     <section>
                         <p class="divider-text d-flex pt-2">или</p>

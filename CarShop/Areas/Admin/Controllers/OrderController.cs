@@ -51,8 +51,8 @@ namespace CarShop.Areas.Admin.Controllers
             orderHeaderFromDb.State = OrderVM.OrderHeader.State;
             orderHeaderFromDb.PostalCode = OrderVM.OrderHeader.PostalCode;
 
-            if (!string.IsNullOrEmpty(orderHeaderFromDb.Carrier)) orderHeaderFromDb.Carrier = OrderVM.OrderHeader.Carrier;
-            if (!string.IsNullOrEmpty(orderHeaderFromDb.TrackingNumber)) orderHeaderFromDb.TrackingNumber = OrderVM.OrderHeader.TrackingNumber;
+            if (string.IsNullOrEmpty(orderHeaderFromDb.Carrier)) orderHeaderFromDb.Carrier = OrderVM.OrderHeader.Carrier;
+            if (string.IsNullOrEmpty(orderHeaderFromDb.TrackingNumber)) orderHeaderFromDb.TrackingNumber = OrderVM.OrderHeader.TrackingNumber;
 
             _unitOfWork.OrderHeader.Update(orderHeaderFromDb);
             _unitOfWork.Save();

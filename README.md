@@ -56,3 +56,7 @@ CarShop — это полнофункциональное веб-приложе�
 6. Скриншоты и gif
 
 ![Главная](CarShop/wwwroot/screenshots/home.png)
+![Детали товара](CarShop/wwwroot/screenshots/car_details.gif)
+![Навигация админа](CarShop/wwwroot/screenshots/admin_navigation.png)
+![Корзина](CarShop/wwwroot/screenshots/cart.gif)
+![Оплата](CarShop/wwwroot/screenshots/payment.gif)

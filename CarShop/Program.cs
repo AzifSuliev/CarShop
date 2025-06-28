@@ -13,16 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<ApplicationDbContext>(options =>  // Конфигурация для БД
+builder.Services.AddDbContext<ApplicationDbContext>(options =>  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
-builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe")); // Конфигурация для Stripe
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe")); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ Stripe
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false).
-    AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders(); // Конфигурация для Identity
+    AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders(); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ Identity
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
@@ -42,7 +42,7 @@ builder.Services.AddAuthentication().AddMicrosoftAccount(option =>
     option.ClientSecret = "RtH8Q~8UziecESMHMeLnn7WtIFuhlCEFF6E7vcRW";
 });
 
-// конфигурация сессий
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -69,7 +69,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>(); // Присваивание секретного ключа 
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>(); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
